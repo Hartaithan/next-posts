@@ -1,8 +1,8 @@
 import React from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
-import { cn } from "../helpers/classNames";
 import Image from "next/image";
+import clsx from "clsx";
 
 const navigation = [
   { name: "Home", href: "/", current: true },
@@ -34,7 +34,7 @@ const Header: React.FC = () => {
                       <a
                         key={item.name}
                         href={item.href}
-                        className={cn(
+                        className={clsx(
                           item.current
                             ? "bg-gray-900 text-white"
                             : "text-gray-300 hover:bg-gray-700 hover:text-white",
@@ -83,7 +83,7 @@ const Header: React.FC = () => {
                         {({ active }) => (
                           <a
                             href="#"
-                            className={cn(
+                            className={clsx(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
@@ -96,7 +96,7 @@ const Header: React.FC = () => {
                         {({ active }) => (
                           <a
                             href="#"
-                            className={cn(
+                            className={clsx(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
@@ -109,7 +109,7 @@ const Header: React.FC = () => {
                         {({ active }) => (
                           <a
                             href="#"
-                            className={cn(
+                            className={clsx(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
@@ -132,7 +132,7 @@ const Header: React.FC = () => {
                   key={item.name}
                   as="a"
                   href={item.href}
-                  className={cn(
+                  className={clsx(
                     item.current
                       ? "bg-gray-900 text-white"
                       : "text-gray-300 hover:bg-gray-700 hover:text-white",

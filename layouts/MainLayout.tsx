@@ -1,5 +1,5 @@
 import React from "react";
-import Container from "../components/Container";
+import MainContainer from "../components/MainContainer";
 import Header from "../components/Header";
 import { IMainLayoutProps } from "../models/MainLayoutModel";
 
@@ -7,7 +7,7 @@ const MainLayout: React.FC<IMainLayoutProps> = ({ children }) => {
   return (
     <>
       <Header />
-      <Container>{children}</Container>
+      <MainContainer grow>{children}</MainContainer>
     </>
   );
 };
