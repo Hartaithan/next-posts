@@ -5,14 +5,17 @@ import Image from "next/image";
 import clsx from "clsx";
 import Link from "next/link";
 import Container from "./Container";
+import { useRouter } from "next/router";
+import { INavigationItem } from "../models/NavigationModel";
 
-const navigation = [
-  { name: "Home", href: "/", current: true },
-  { name: "Posts", href: "/posts", current: false },
-  { name: "Add post", href: "/posts/add", current: false },
+const navigation: INavigationItem[] = [
+  { name: "Home", path: "/" },
+  { name: "Posts", path: "/posts" },
+  { name: "Add post", path: "/posts/add" },
 ];
 
 const Header: React.FC = () => {
+  const router = useRouter();
   return (
     <Disclosure as="header" className="bg-gray-800">
       {({ open }) => (
@@ -33,15 +36,17 @@ const Header: React.FC = () => {
                 <div className="hidden sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <Link key={item.name} href={item.href}>
+                      <Link key={item.name} href={item.path}>
                         <a
                           className={clsx(
-                            item.current
+                            router.pathname === item.path
                               ? "bg-gray-900 text-white"
                               : "text-gray-300 hover:bg-gray-700 hover:text-white",
                             "px-3 py-2 rounded-md text-sm font-medium"
                           )}
-                          aria-current={item.current ? "page" : undefined}
+                          aria-current={
+                            router.pathname === item.path ? "page" : undefined
+                          }
                         >
                           {item.name}
                         </a>
@@ -125,14 +130,16 @@ const Header: React.FC = () => {
                 <Disclosure.Button
                   key={item.name}
                   as="a"
-                  href={item.href}
+                  href={item.path}
                   className={clsx(
-                    item.current
+                    router.pathname === item.path
                       ? "bg-gray-900 text-white"
                       : "text-gray-300 hover:bg-gray-700 hover:text-white",
                     "block px-3 py-2 rounded-md text-base font-medium"
                   )}
-                  aria-current={item.current ? "page" : undefined}
+                  aria-current={
+                    router.pathname === item.path ? "page" : undefined
+                  }
                 >
                   {item.name}
                 </Disclosure.Button>
