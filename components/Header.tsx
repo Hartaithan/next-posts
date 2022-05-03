@@ -25,6 +25,7 @@ const useStyles = createStyles((theme) => ({
   root: {
     position: "relative",
     zIndex: 1,
+    marginBottom: 30,
   },
   dropdown: {
     position: "absolute",
@@ -112,7 +113,7 @@ const Header: React.FC = () => {
   ));
 
   return (
-    <MantineHeader height={HEADER_HEIGHT} mb={120} className={classes.root}>
+    <MantineHeader height={HEADER_HEIGHT} className={classes.root}>
       <Container className={classes.header}>
         <Group spacing={5} className={classes.links}>
           {items}
