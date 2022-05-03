@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { INavigationItem } from "../models/NavigationModel";
+import { IHeaderLink } from "../models/HeaderModel";
 import {
   createStyles,
   Header as MantineHeader,
@@ -13,7 +13,7 @@ import {
 import { useBooleanToggle } from "@mantine/hooks";
 import Link from "next/link";
 
-const navigation: INavigationItem[] = [
+const navigation: IHeaderLink[] = [
   { name: "Home", path: "/" },
   { name: "Posts", path: "/posts" },
   { name: "Add post", path: "/posts/add" },
@@ -26,7 +26,6 @@ const useStyles = createStyles((theme) => ({
     position: "relative",
     zIndex: 1,
   },
-
   dropdown: {
     position: "absolute",
     top: HEADER_HEIGHT,
@@ -37,31 +36,26 @@ const useStyles = createStyles((theme) => ({
     borderTopLeftRadius: 0,
     borderTopWidth: 0,
     overflow: "hidden",
-
     [theme.fn.largerThan("sm")]: {
       display: "none",
     },
   },
-
   header: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     height: "100%",
   },
-
   links: {
     [theme.fn.smallerThan("sm")]: {
       display: "none",
     },
   },
-
   burger: {
     [theme.fn.largerThan("sm")]: {
       display: "none",
     },
   },
-
   link: {
     display: "block",
     lineHeight: 1,
@@ -74,20 +68,17 @@ const useStyles = createStyles((theme) => ({
         : theme.colors.gray[7],
     fontSize: theme.fontSizes.sm,
     fontWeight: 500,
-
     "&:hover": {
       backgroundColor:
         theme.colorScheme === "dark"
           ? theme.colors.dark[6]
           : theme.colors.gray[0],
     },
-
     [theme.fn.smallerThan("sm")]: {
       borderRadius: 0,
       padding: theme.spacing.md,
     },
   },
-
   linkActive: {
     "&, &:hover": {
       backgroundColor:
