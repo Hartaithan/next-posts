@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import { useBooleanToggle } from "@mantine/hooks";
 import Link from "next/link";
+import ThemeToggle from "./ThemeToggle";
 
 const navigation: IHeaderLink[] = [
   { name: "Home", path: "/" },
@@ -118,6 +119,7 @@ const Header: React.FC = () => {
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
+        <ThemeToggle />
         <Burger
           opened={opened}
           onClick={() => toggleOpened()}
