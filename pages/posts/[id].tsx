@@ -9,7 +9,7 @@ const Post: NextPage = () => {
 
   return (
     <MainLayout>
-      <h1 className="text-3xl font-bold underline">Post + {id}</h1>
+      <h1>Post + {id}</h1>
     </MainLayout>
   );
 };

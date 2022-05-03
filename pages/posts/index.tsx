@@ -1,7 +1,5 @@
 import { NextPage } from "next";
 import React from "react";
-import Grid from "../../components/Grid";
-import GridItem from "../../components/GridItem";
 import MainLayout from "../../layouts/MainLayout";
 import { IPost } from "../../models/PostModel";
 
@@ -35,11 +33,7 @@ const posts: IPost[] = [
 const Posts: NextPage = () => {
   return (
     <MainLayout>
-      <Grid>
-        {posts.map((post) => (
-          <GridItem key={post.id} post={post} />
-        ))}
-      </Grid>
+      <h1>Post</h1>
     </MainLayout>
   );
 };
