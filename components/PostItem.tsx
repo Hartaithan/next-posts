@@ -9,7 +9,7 @@ const useStyles = createStyles((theme) => ({
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
     cursor: "pointer",
-    transition: "transform 0.3s ease-in-out",
+    transition: "transform 0.3s ease-in",
     "&:hover": {
       transform: "scale(1.02)",
     },
