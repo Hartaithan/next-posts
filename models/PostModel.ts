@@ -1,6 +1,11 @@
-export interface IPost {
+export interface IPostItem {
   id: number;
-  name: string;
-  href: string;
-  src: string;
+  image: string;
+  title: string;
+  description: string;
+  author: string;
+}
+
+export interface IPostItemProps {
+  post: IPostItem;
 }
