@@ -8,6 +8,11 @@ const useStyles = createStyles((theme) => ({
     position: "relative",
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+    cursor: "pointer",
+    transition: "transform 0.3s ease-in-out",
+    "&:hover": {
+      transform: "scale(1.02)",
+    },
   },
   rating: {
     position: "absolute",
