@@ -6,6 +6,7 @@ import {
   MantineProvider,
 } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
+import { NotificationsProvider } from "@mantine/notifications";
 
 const MyApp = (props: AppProps) => {
   const { Component, pageProps } = props;
@@ -27,7 +28,9 @@ const MyApp = (props: AppProps) => {
         withNormalizeCSS
         theme={{ colorScheme }}
       >
-        <Component {...pageProps} />
+        <NotificationsProvider>
+          <Component {...pageProps} />
+        </NotificationsProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   );
