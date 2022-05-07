@@ -1,4 +1,4 @@
-import { Card, createStyles, Group, Text, Title } from "@mantine/core";
+import { Badge, Card, createStyles, Group, Text, Title } from "@mantine/core";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
@@ -6,6 +6,7 @@ import {
 } from "next";
 import React from "react";
 import ImageFallback from "../../components/ImageFallback";
+import { fullDate } from "../../helpers/date";
 import MainLayout from "../../layouts/MainLayout";
 import { IPostResponse } from "../../models/PostModel";
 
@@ -59,7 +60,6 @@ const Post: NextPage = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { classes } = useStyles();
   const {
-    id,
     created_at,
     updated_at,
     image_url,
@@ -85,6 +85,26 @@ const Post: NextPage = ({
           </Group>
         </Card.Section>
         <Group className={classes.post}>
+          <Group>
+            <Text weight={500}>
+              Author:&nbsp;&nbsp;
+              <Badge color="gray" variant="outline">
+                {user}
+              </Badge>
+            </Text>
+            <Text weight={500}>
+              Created:&nbsp;&nbsp;
+              <Badge color="gray" variant="outline">
+                {fullDate(created_at)}
+              </Badge>
+            </Text>
+            <Text weight={500}>
+              Updated:&nbsp;&nbsp;
+              <Badge color="gray" variant="outline">
+                {fullDate(updated_at)}
+              </Badge>
+            </Text>
+          </Group>
           <Text weight={500} dangerouslySetInnerHTML={{ __html: content }} />
         </Group>
       </Card>
