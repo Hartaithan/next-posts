@@ -18,7 +18,7 @@ const Posts: NextPage = ({
   posts,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
-    <MainLayout>
+    <MainLayout title={"All posts"}>
       <Grid>
         {posts.map((item: IPostItem) => (
           <Grid.Col key={item.id} xs={12} lg={4}>

@@ -5,7 +5,7 @@ import MainLayout from "../layouts/MainLayout";
 const Home: NextPage = () => {
   const { user } = useAuth();
   return (
-    <MainLayout>
+    <MainLayout title={"Home"}>
       <h1>Hello world!</h1>
     </MainLayout>
   );

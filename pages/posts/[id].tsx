@@ -70,7 +70,7 @@ const Post: NextPage = ({
   } = post;
 
   return (
-    <MainLayout>
+    <MainLayout title={title}>
       <Card shadow="sm" p="lg" radius={20}>
         <Card.Section className={classes.section}>
           <ImageFallback

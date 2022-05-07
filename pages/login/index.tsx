@@ -38,7 +38,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <MainLayout>
+    <MainLayout title={"Login"}>
       <Center style={{ width: "100%", height: "100%" }}>
         <Paper radius="md" p="xl" withBorder style={{ width: "100%" }}>
           <Text size="lg" mb={6} weight={500}>

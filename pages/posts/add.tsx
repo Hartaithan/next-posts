@@ -4,7 +4,7 @@ import MainLayout from "../../layouts/MainLayout";
 
 const PostAdd: NextPage = () => {
   return (
-    <MainLayout>
+    <MainLayout title={"Add post"}>
       <h1>Add post</h1>
     </MainLayout>
   );
