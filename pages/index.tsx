@@ -7,7 +7,6 @@ const Home: NextPage = () => {
   return (
     <MainLayout>
       <h1>Hello world!</h1>
-      <div>{JSON.stringify(user)}</div>
     </MainLayout>
   );
 };

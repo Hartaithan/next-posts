@@ -1,6 +1,7 @@
 import { Card, Image, Text, Group, createStyles } from "@mantine/core";
 import Link from "next/link";
 import React from "react";
+import { UserCircle } from "tabler-icons-react";
 import { IPostItemProps } from "../models/PostModel";
 
 const useStyles = createStyles((theme) => ({
@@ -32,12 +33,15 @@ const useStyles = createStyles((theme) => ({
         : theme.colors.gray[0],
   },
   footer: {
+    display: "flex",
+    justifyContent: "flex-start",
     marginTop: theme.spacing.md,
+    gap: "12px",
   },
 }));
 
 const PostItem: React.FC<IPostItemProps> = (props) => {
-  const { id, image, title, description, author } = props.post;
+  const { id, image_url, title, description, user } = props.post;
   const { classes } = useStyles();
 
   return (
@@ -45,7 +49,7 @@ const PostItem: React.FC<IPostItemProps> = (props) => {
       <Card withBorder radius="md" className={classes.card}>
         <Card.Section>
           <a>
-            <Image src={image} height={180} alt="post preview" />
+            <Image src={image_url} height={180} alt="post preview" />
           </a>
         </Card.Section>
         <Text className={classes.title} weight={500} component="a">
@@ -55,8 +59,9 @@ const PostItem: React.FC<IPostItemProps> = (props) => {
           {description}
         </Text>
         <Group position="apart" className={classes.footer}>
+          <UserCircle size={16} strokeWidth={2} />
           <Text size="sm" inline>
-            {author}
+            {user}
           </Text>
         </Group>
       </Card>
