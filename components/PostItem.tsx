@@ -2,7 +2,9 @@ import { Card, Image, Text, Group, createStyles } from "@mantine/core";
 import Link from "next/link";
 import React from "react";
 import { UserCircle } from "tabler-icons-react";
+// import { handleImageError } from "../helpers/image";
 import { IPostItemProps } from "../models/PostModel";
+import ImageFallback from "./ImageFallback";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -14,6 +16,11 @@ const useStyles = createStyles((theme) => ({
     "&:hover": {
       transform: "scale(1.02)",
     },
+  },
+  section: {
+    height: "180px",
+    width: "calc(100% + 32px)",
+    position: "relative",
   },
   rating: {
     position: "absolute",
@@ -47,10 +54,13 @@ const PostItem: React.FC<IPostItemProps> = (props) => {
   return (
     <Link href={`/posts/${id}`} passHref>
       <Card withBorder radius="md" className={classes.card}>
-        <Card.Section>
-          <a>
-            <Image src={image_url} height={180} alt="post preview" />
-          </a>
+        <Card.Section className={classes.section}>
+          <ImageFallback
+            src={image_url}
+            layout="fill"
+            objectFit="cover"
+            alt="post preview"
+          />
         </Card.Section>
         <Text className={classes.title} weight={500} component="a">
           {title}
