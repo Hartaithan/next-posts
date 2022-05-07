@@ -16,7 +16,7 @@ const AuthContext = createContext<IAuthContext>(defaultValues);
 
 export const AuthProvider = ({ children }: IAuthProviderProps) => {
   const [user, setUser] = useState<any>(null);
-  const [auth, setAuth] = useState<boolean>(false);
+  const [isAuth, setAuth] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(true);
 
   const login = async (email: string) => {
@@ -50,7 +50,6 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     try {
       setLoading(true);
       const user = supabase.auth.user();
-      console.log(user);
       let { data, error, status } = await supabase
         .from("profiles")
         .select(`username, website, avatar_url`)
@@ -71,7 +70,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
 
   const value = {
     user,
-    isAuth: auth,
+    isAuth,
     isLoading,
     login,
     logout,
@@ -82,6 +81,8 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     const session = supabase.auth.session();
     if (session?.user) {
       setUser(session.user);
+      setAuth(true);
+      setLoading(false);
     }
     supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
