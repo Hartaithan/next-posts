@@ -9,10 +9,14 @@ import {
   Burger,
   Paper,
   Transition,
+  Button,
+  Skeleton,
+  LoadingOverlay,
 } from "@mantine/core";
 import { useBooleanToggle } from "@mantine/hooks";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
+import { useAuth } from "../context/auth";
 
 const navigation: IHeaderLink[] = [
   { name: "Home", path: "/" },
@@ -44,14 +48,18 @@ const useStyles = createStyles((theme) => ({
   },
   header: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
     height: "100%",
   },
   links: {
+    marginRight: "auto",
     [theme.fn.smallerThan("sm")]: {
       display: "none",
     },
+  },
+  auth: {
+    marginRight: "12px",
   },
   burger: {
     [theme.fn.largerThan("sm")]: {
@@ -95,6 +103,7 @@ const useStyles = createStyles((theme) => ({
 
 const Header: React.FC = () => {
   const router = useRouter();
+  const { isAuth, isLoading, logout } = useAuth();
   const [opened, toggleOpened] = useBooleanToggle(false);
   const { classes, cx } = useStyles();
 
@@ -119,6 +128,29 @@ const Header: React.FC = () => {
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
+        {isAuth ? (
+          <Button
+            className={classes.auth}
+            onClick={() => logout()}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Skeleton visible={true} height={8} radius="xl" width="50px" />
+            ) : (
+              "Log out"
+            )}
+          </Button>
+        ) : (
+          <Link href="/login" passHref>
+            <Button className={classes.auth} disabled={isLoading}>
+              {isLoading ? (
+                <Skeleton visible={true} height={8} radius="xl" width="50px" />
+              ) : (
+                "Log in"
+              )}
+            </Button>
+          </Link>
+        )}
         <ThemeToggle />
         <Burger
           opened={opened}

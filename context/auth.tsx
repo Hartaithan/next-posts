@@ -1,4 +1,5 @@
 import { Session } from "@supabase/supabase-js";
+import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 import { IAuthContext, IAuthProviderProps } from "../models/AuthModel";
 import { supabase } from "../utils/supabaseClient";
@@ -15,9 +16,10 @@ const defaultValues: IAuthContext = {
 const AuthContext = createContext<IAuthContext>(defaultValues);
 
 export const AuthProvider = ({ children }: IAuthProviderProps) => {
+  const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [isAuth, setAuth] = useState<boolean>(false);
-  const [isLoading, setLoading] = useState<boolean>(true);
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   const login = async (email: string) => {
     try {
@@ -43,6 +45,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
       setLoading(false);
       setUser(null);
       setAuth(false);
+      router.push("./login");
     }
   };
 
@@ -82,14 +85,17 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     if (session?.user) {
       setUser(session.user);
       setAuth(true);
-      setLoading(false);
     }
     supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
+      if (_event == "SIGNED_IN" && session) {
         setUser(session.user);
+        setAuth(true);
+      }
+      if (_event == "SIGNED_OUT") {
+        logout();
       }
     });
-  }, []);
+  }, []); // eslint-disable-line
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
