@@ -1,7 +1,8 @@
 import { Card, Text, Group, createStyles } from "@mantine/core";
 import Link from "next/link";
 import React from "react";
-import { UserCircle } from "tabler-icons-react";
+import { CalendarTime, UserCircle } from "tabler-icons-react";
+import { onlyDate } from "../helpers/date";
 import { IPostItemProps } from "../models/PostModel";
 import ImageFallback from "./ImageFallback";
 
@@ -47,7 +48,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const PostItem: React.FC<IPostItemProps> = (props) => {
-  const { id, image_url, title, description, user } = props.post;
+  const { id, created_at, image_url, title, description, user } = props.post;
   const { classes } = useStyles();
 
   return (
@@ -71,6 +72,12 @@ const PostItem: React.FC<IPostItemProps> = (props) => {
           <UserCircle size={16} strokeWidth={2} />
           <Text size="sm" inline>
             {user}
+          </Text>
+        </Group>
+        <Group position="apart" className={classes.footer}>
+          <CalendarTime size={16} strokeWidth={2} />
+          <Text size="sm" inline>
+            {onlyDate(created_at)}
           </Text>
         </Group>
       </Card>
