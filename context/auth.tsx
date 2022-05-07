@@ -1,4 +1,4 @@
-import { Session } from "@supabase/supabase-js";
+import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 import { IAuthContext, IAuthProviderProps } from "../models/AuthModel";
@@ -17,9 +17,9 @@ const AuthContext = createContext<IAuthContext>(defaultValues);
 
 export const AuthProvider = ({ children }: IAuthProviderProps) => {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isAuth, setAuth] = useState<boolean>(false);
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(true);
 
   const login = async (email: string) => {
     try {
@@ -86,13 +86,14 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
       setUser(session.user);
       setAuth(true);
     }
+    setLoading(false);
     supabase.auth.onAuthStateChange((_event, session) => {
       if (_event == "SIGNED_IN" && session) {
         setUser(session.user);
         setAuth(true);
       }
       if (_event == "SIGNED_OUT") {
-        logout();
+        router.push("./login");
       }
     });
   }, []); // eslint-disable-line

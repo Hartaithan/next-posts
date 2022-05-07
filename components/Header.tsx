@@ -11,7 +11,6 @@ import {
   Transition,
   Button,
   Skeleton,
-  LoadingOverlay,
 } from "@mantine/core";
 import { useBooleanToggle } from "@mantine/hooks";
 import Link from "next/link";
@@ -135,7 +134,7 @@ const Header: React.FC = () => {
             disabled={isLoading}
           >
             {isLoading ? (
-              <Skeleton visible={true} height={8} radius="xl" width="50px" />
+              <Skeleton height={8} radius="xl" width="50px" />
             ) : (
               "Log out"
             )}
@@ -144,7 +143,7 @@ const Header: React.FC = () => {
           <Link href="/login" passHref>
             <Button className={classes.auth} disabled={isLoading}>
               {isLoading ? (
-                <Skeleton visible={true} height={8} radius="xl" width="50px" />
+                <Skeleton height={8} radius="xl" width="50px" />
               ) : (
                 "Log in"
               )}
