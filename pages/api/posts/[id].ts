@@ -37,7 +37,6 @@ async function updatePostById(req: NextApiRequest, res: NextApiResponse) {
 async function deletePostById(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { id },
-    body,
   } = req;
   const { error } = await supabase.from("posts").delete().eq("id", id);
   if (error) {
@@ -55,11 +54,11 @@ export default async function handler(
   const { method } = req;
   switch (method) {
     case "GET":
-      getPostById(req, res);
+      return getPostById(req, res);
     case "PUT":
-      updatePostById(req, res);
+      return updatePostById(req, res);
     case "DELETE":
-      deletePostById(req, res);
+      return deletePostById(req, res);
     default:
       res.setHeader("Allow", ["GET", "PUT", "DELETE"]);
       return res.status(405).end(`Method ${method} Not Allowed`);

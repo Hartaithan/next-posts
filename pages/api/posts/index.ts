@@ -17,7 +17,8 @@ async function addPost(req: NextApiRequest, res: NextApiResponse) {
     title: body.title,
     description: body.description,
     content: body.content,
-    author: body.author,
+    image_url: body.image_url,
+    user: body.user,
   };
   const { data, error } = await supabase.from("posts").insert([payload]);
   if (error) {
@@ -37,9 +38,9 @@ export default async function handler(
   const { method } = req;
   switch (method) {
     case "GET":
-      getAllPosts(res);
+      return getAllPosts(res);
     case "POST":
-      addPost(req, res);
+      return addPost(req, res);
     default:
       res.setHeader("Allow", ["GET", "POST"]);
       return res.status(405).end(`Method ${method} Not Allowed`);
