@@ -16,3 +16,7 @@ export interface IPostItemProps {
 export interface IPostsResponse {
   posts: IPostItem[];
 }
+
+export interface IPostResponse {
+  post: IPostItem;
+}

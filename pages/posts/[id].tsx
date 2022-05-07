@@ -1,50 +1,93 @@
-import { NextPage } from "next";
-import { useRouter } from "next/router";
+import { Card, createStyles, Group, Text, Title } from "@mantine/core";
+import {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage,
+} from "next";
 import React from "react";
+import ImageFallback from "../../components/ImageFallback";
 import MainLayout from "../../layouts/MainLayout";
+import { IPostResponse } from "../../models/PostModel";
 
-const posts = [
-  {
-    id: 1,
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png",
-    title: "Title 1",
-    description: "Description 1",
-    author: "Author 1",
-    content:
-      "<p>1 Your initial <b>html value</b> or an empty string to init editor without value</p>",
-  },
-  {
-    id: 2,
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png",
-    title: "Title 2",
-    description: "Description 2",
-    author: "Author 2",
-    content:
-      "<p>2 Your initial <b>html value</b> or an empty string to init editor without value</p>",
-  },
-  {
-    id: 3,
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png",
-    title: "Title 3",
-    description: "Description 3",
-    author: "Author 3",
-    content:
-      "<p>3 Your initial <b>html value</b> or an empty string to init editor without value</p>",
-  },
-];
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const id = context.params?.id;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`);
+  const { post }: IPostResponse = await res.json();
+  return {
+    props: { post },
+  };
+};
 
-const Post: NextPage = () => {
-  const router = useRouter();
-  const { id } = router.query;
-  // const { image, title, description, author, content } = posts[Number(id) - 1];
+const useStyles = createStyles((theme) => ({
+  card: {
+    position: "relative",
+    backgroundColor:
+      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+    cursor: "pointer",
+    transition: "transform 0.3s ease-in",
+    "&:hover": {
+      transform: "scale(1.02)",
+    },
+  },
+  section: {
+    height: "300px",
+    width: "calc(100% + 40px)",
+    position: "relative",
+    borderRadius: "20px",
+    overflow: "hidden",
+  },
+  title: {
+    height: "100%",
+    position: "relative",
+    padding: "20px",
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    alignItems: "flex-start",
+    gap: "0",
+    color: `${theme.white} !important`,
+    "*": {
+      textShadow: "0px 3px 6px #000000",
+    },
+  },
+  post: {
+    marginTop: "20px",
+  },
+}));
+
+const Post: NextPage = ({
+  post,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const { classes } = useStyles();
+  const {
+    id,
+    created_at,
+    updated_at,
+    image_url,
+    title,
+    description,
+    content,
+    user,
+  } = post;
 
   return (
     <MainLayout>
-      <h1>Post + {id}</h1>
-      {/* <div dangerouslySetInnerHTML={{ __html: content }}></div> */}
+      <Card shadow="sm" p="lg" radius={20}>
+        <Card.Section className={classes.section}>
+          <ImageFallback
+            src={image_url}
+            layout="fill"
+            objectFit="cover"
+            alt="post image"
+          />
+          <Group className={classes.title}>
+            <Title order={1}>{title}</Title>
+            <Text size="xl">{description}</Text>
+          </Group>
+        </Card.Section>
+        <Group className={classes.post}>
+          <Text weight={500} dangerouslySetInnerHTML={{ __html: content }} />
+        </Group>
+      </Card>
     </MainLayout>
   );
 };

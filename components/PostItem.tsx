@@ -1,8 +1,7 @@
-import { Card, Image, Text, Group, createStyles } from "@mantine/core";
+import { Card, Text, Group, createStyles } from "@mantine/core";
 import Link from "next/link";
 import React from "react";
 import { UserCircle } from "tabler-icons-react";
-// import { handleImageError } from "../helpers/image";
 import { IPostItemProps } from "../models/PostModel";
 import ImageFallback from "./ImageFallback";
 

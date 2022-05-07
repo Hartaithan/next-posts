@@ -5,7 +5,11 @@ async function getPostById(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { id },
   } = req;
-  const { data, error } = await supabase.from("posts").select("*").eq("id", id);
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("id", id)
+    .single();
   if (error) {
     return res
       .status(400)
