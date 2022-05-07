@@ -2,6 +2,7 @@ import { Grid } from "@mantine/core";
 import { NextPage } from "next";
 import React from "react";
 import PostItem from "../../components/PostItem";
+import { useAuth } from "../../context/auth";
 import MainLayout from "../../layouts/MainLayout";
 
 const posts = [
@@ -32,8 +33,10 @@ const posts = [
 ];
 
 const Posts: NextPage = () => {
+  const { user } = useAuth();
   return (
     <MainLayout>
+      <div>{JSON.stringify(user)}</div>
       <Grid>
         {posts.map((item) => (
           <Grid.Col key={item.id} xs={12} lg={4}>

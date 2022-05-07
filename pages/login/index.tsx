@@ -4,8 +4,10 @@ import React from "react";
 import MainLayout from "../../layouts/MainLayout";
 import { supabase } from "../../utils/supabaseClient";
 import { showNotification } from "@mantine/notifications";
+import { useAuth } from "../../context/auth";
 
 const LoginPage: React.FC = () => {
+  const { login } = useAuth();
   const form = useForm({
     initialValues: {
       email: "",
@@ -16,22 +18,23 @@ const LoginPage: React.FC = () => {
   });
 
   const handleSubmit = async (values: typeof form.values) => {
-    try {
-      const { error } = await supabase.auth.signIn({ email: values.email });
-      if (error) throw error;
-      showNotification({
-        title: "Succsess",
-        color: "green",
-        message: "Check your email for the login link!",
-      });
-    } catch (error) {
-      console.error("handleLogin", error);
-      showNotification({
-        title: "Error",
-        color: "red",
-        message: "Login error",
-      });
-    }
+    login(values.email);
+    // try {
+    //   const { error } = await supabase.auth.signIn({ email: values.email });
+    //   if (error) throw error;
+    //   showNotification({
+    //     title: "Succsess",
+    //     color: "green",
+    //     message: "Check your email for the login link!",
+    //   });
+    // } catch (error) {
+    //   console.error("handleLogin", error);
+    //   showNotification({
+    //     title: "Error",
+    //     color: "red",
+    //     message: "Login error",
+    //   });
+    // }
   };
 
   return (
