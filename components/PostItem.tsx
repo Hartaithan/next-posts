@@ -63,15 +63,15 @@ const PostItem: React.FC<IPostItemProps> = (props) => {
           />
         </Card.Section>
         <Text className={classes.title} weight={500} component="a">
-          {title}
+          {title ? title : "Title not found"}
         </Text>
         <Text size="sm" color="dimmed" lineClamp={4}>
-          {description}
+          {description ? description : "Description not found"}
         </Text>
         <Group position="apart" className={classes.footer}>
           <UserCircle size={16} strokeWidth={2} />
           <Text size="sm" inline>
-            {user}
+            {user ? user : "Unknown"}
           </Text>
         </Group>
         <Group position="apart" className={classes.footer}>
