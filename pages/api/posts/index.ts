@@ -20,7 +20,10 @@ async function addPost(req: NextApiRequest, res: NextApiResponse) {
     image_url: body.image_url,
     user: body.user,
   };
-  const { data, error } = await supabase.from("posts").insert([payload]);
+  const { data, error } = await supabase
+    .from("posts")
+    .insert([payload])
+    .single();
   if (error) {
     return res
       .status(400)

@@ -37,6 +37,9 @@ const PostAdd: NextPage = () => {
   const handleSubmit = async (values: typeof form.values) => {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(values),
     })
       .then((res) => res.json())

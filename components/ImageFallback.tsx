@@ -13,7 +13,6 @@ const ImageFallback: FC<ImageProps> = (props) => {
       blurDataURL="/img/post_placeholder.jpg"
       onError={() => {
         if (typeof window !== "undefined") {
-          console.log("error");
           setImg("./img/post_placeholder.jpg");
         }
       }}
