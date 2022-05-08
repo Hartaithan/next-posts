@@ -80,8 +80,10 @@ const Post: NextPage = ({
             alt="post image"
           />
           <Group className={classes.title}>
-            <Title order={1}>{title}</Title>
-            <Text size="xl">{description}</Text>
+            <Title order={1}>{title ? title : "Title not found"}</Title>
+            <Text size="xl">
+              {description ? description : "Description not found"}
+            </Text>
           </Group>
         </Card.Section>
         <Group className={classes.post}>
@@ -89,7 +91,7 @@ const Post: NextPage = ({
             <Text weight={500}>
               Author:&nbsp;&nbsp;
               <Badge color="gray" variant="outline">
-                {user}
+                {user ? user : "Unknown"}
               </Badge>
             </Text>
             <Text weight={500}>
