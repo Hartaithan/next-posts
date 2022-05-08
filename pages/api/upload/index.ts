@@ -22,10 +22,13 @@ async function uploadImage(req: NextApiRequest, res: NextApiResponse) {
       resolve(files.file);
     });
   });
-  if (file.error) {
+  if (file?.error) {
     return res
       .status(400)
       .json({ message: "Error parsing image formdata", error: file.error });
+  }
+  if (!file) {
+    return res.status(400).json({ message: "Image not provided" });
   }
   try {
     const result = await cloudinary.uploader.upload(file.filepath);
