@@ -20,3 +20,8 @@ export interface IDropzoneRejectedFile {
   file: IDropzoneFile;
   errors: FileError[];
 }
+
+export interface IPreviewState {
+  isLoading: boolean;
+  url: string | null;
+}

@@ -1,6 +1,7 @@
-import { Group, MantineTheme, Text } from "@mantine/core";
+import { Center, Group, Loader, MantineTheme, Text } from "@mantine/core";
 import { Photo } from "tabler-icons-react";
 import { DropzoneStatus } from "@mantine/dropzone";
+import { IPreviewState } from "../models/DropzoneModel";
 
 const getIconColor = (status: DropzoneStatus, theme: MantineTheme) => {
   return status.accepted
@@ -15,7 +16,7 @@ const getIconColor = (status: DropzoneStatus, theme: MantineTheme) => {
 const DropzoneChildren = (
   status: DropzoneStatus,
   theme: MantineTheme,
-  preview: string | null
+  preview: IPreviewState
 ) => {
   return (
     <Group
@@ -23,12 +24,26 @@ const DropzoneChildren = (
       spacing="xl"
       style={{ minHeight: 220, pointerEvents: "none" }}
     >
-      {preview ? (
-        <img
-          src={preview}
-          alt="dropzone"
-          style={{ width: "100%", height: "100%", objectFit: "contain" }}
-        />
+      {preview.url ? (
+        <div style={{ width: "100%", height: "100%", position: "relative" }}>
+          {preview.isLoading && (
+            <Center
+              style={{ width: "100%", height: "100%", position: "absolute" }}
+            >
+              <Loader />
+            </Center>
+          )}
+          <img
+            src={preview.url}
+            alt="dropzone"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+              opacity: preview.isLoading ? 0.3 : 1,
+            }}
+          />
+        </div>
       ) : (
         <>
           <Photo style={{ color: getIconColor(status, theme) }} size={80} />

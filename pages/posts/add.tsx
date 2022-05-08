@@ -11,13 +11,17 @@ import DropzoneChildren from "../../components/DropzoneChildren";
 import {
   IDropzoneFile,
   IDropzoneRejectedFile,
+  IPreviewState,
 } from "../../models/DropzoneModel";
 import { showNotification } from "@mantine/notifications";
 
 const PostAdd: NextPage = () => {
   const theme = useMantineTheme();
   const { user } = useAuth();
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<IPreviewState>({
+    isLoading: false,
+    url: null,
+  });
   const form = useForm<IPostPayload>({
     initialValues: {
       title: "",
@@ -36,11 +40,12 @@ const PostAdd: NextPage = () => {
     form.values.content === "<p><br></p>" ||
     form.values.title.length === 0 ||
     form.values.description.length === 0 ||
-    form.values.image_url === null;
+    form.values.image_url === null ||
+    preview.isLoading;
 
   const handleDropzone = async (files: IDropzoneFile[]) => {
     const file = files[0];
-    setPreview(URL.createObjectURL(file));
+    setPreview({ isLoading: true, url: URL.createObjectURL(file) });
     const fd = new FormData();
     fd.append("file", file);
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upload`, {
@@ -50,7 +55,7 @@ const PostAdd: NextPage = () => {
       .then((res) => res.json())
       .then((res) => {
         form.setFieldValue("image_url", res.image_url);
-        setPreview(res.image_url);
+        setPreview({ isLoading: false, url: res.image_url });
       })
       .catch((error) => {
         showNotification({
