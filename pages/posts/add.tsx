@@ -21,6 +21,12 @@ const PostAdd: NextPage = () => {
     console.log(values);
   };
 
+  const isValid =
+    form.values.content === "<p><br></p>" ||
+    form.values.title.length === 0 ||
+    form.values.description.length === 0 ||
+    form.values.image_url.length === 0;
+
   return (
     <MainLayout title={"Add post"}>
       <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -42,7 +48,9 @@ const PostAdd: NextPage = () => {
           onChange={(value) => form.setFieldValue("content", value)}
         />
         <Group position="right" mt="md">
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isValid}>
+            Submit
+          </Button>
         </Group>
       </form>
     </MainLayout>
