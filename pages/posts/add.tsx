@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button, Group, TextInput, useMantineTheme } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
 import { NextPage } from "next";
@@ -12,7 +13,6 @@ import {
   IDropzoneRejectedFile,
 } from "../../models/DropzoneModel";
 import { showNotification } from "@mantine/notifications";
-import { useEffect, useState } from "react";
 
 const PostAdd: NextPage = () => {
   const theme = useMantineTheme();
@@ -38,10 +38,27 @@ const PostAdd: NextPage = () => {
     form.values.description.length === 0 ||
     form.values.image_url === null;
 
-  const handleDropzone = (files: IDropzoneFile[]) => {
+  const handleDropzone = async (files: IDropzoneFile[]) => {
     const file = files[0];
     setPreview(URL.createObjectURL(file));
-    form.setFieldValue("image_url", URL.createObjectURL(file));
+    const fd = new FormData();
+    fd.append("file", file);
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upload`, {
+      method: "POST",
+      body: fd,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        form.setFieldValue("image_url", res.image_url);
+        setPreview(res.image_url);
+      })
+      .catch((error) => {
+        showNotification({
+          title: "Upload failed",
+          color: "red",
+          message: error.response.message || "Error during upload image",
+        });
+      });
   };
 
   const handleReejctedFiles = (files: IDropzoneRejectedFile[]) => {

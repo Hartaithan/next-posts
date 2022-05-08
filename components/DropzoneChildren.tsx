@@ -1,7 +1,6 @@
 import { Group, MantineTheme, Text } from "@mantine/core";
 import { Photo } from "tabler-icons-react";
 import { DropzoneStatus } from "@mantine/dropzone";
-import React, { useEffect } from "react";
 
 const getIconColor = (status: DropzoneStatus, theme: MantineTheme) => {
   return status.accepted
@@ -18,10 +17,6 @@ const DropzoneChildren = (
   theme: MantineTheme,
   preview: string | null
 ) => {
-  useEffect(() => {
-    console.log("status", status);
-  }, [status]);
-
   return (
     <Group
       position="center"
