@@ -135,7 +135,7 @@ const Header: React.FC = () => {
         showNotification({
           title: "Error",
           color: "red",
-          message: error.error_description || error.message || "Log out error",
+          message: error.error_description || error.message || "Logout failed",
         });
       });
   };
