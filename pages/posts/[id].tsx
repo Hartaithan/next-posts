@@ -4,7 +4,7 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import React from "react";
+import Editor from "../../components/Editor";
 import ImageFallback from "../../components/ImageFallback";
 import { fullDate } from "../../helpers/date";
 import MainLayout from "../../layouts/MainLayout";
@@ -53,12 +53,21 @@ const useStyles = createStyles((theme) => ({
   post: {
     marginTop: "20px",
   },
+  badges: {
+    width: "100%",
+  },
+  content: {
+    width: "100%",
+    " > div": {
+      padding: "0 !important",
+    },
+  },
 }));
 
 const Post: NextPage = ({
   post,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { classes } = useStyles();
+  const { classes, cx } = useStyles();
   const {
     created_at,
     updated_at,
@@ -87,7 +96,7 @@ const Post: NextPage = ({
           </Group>
         </Card.Section>
         <Group className={classes.post}>
-          <Group>
+          <Group className={classes.badges}>
             <Text weight={500}>
               Author:&nbsp;&nbsp;
               <Badge color="gray" variant="outline">
@@ -100,14 +109,21 @@ const Post: NextPage = ({
                 {fullDate(created_at)}
               </Badge>
             </Text>
-            <Text weight={500}>
-              Updated:&nbsp;&nbsp;
-              <Badge color="gray" variant="outline">
-                {fullDate(updated_at)}
-              </Badge>
-            </Text>
+            {updated_at && (
+              <Text weight={500}>
+                Updated:&nbsp;&nbsp;
+                <Badge color="gray" variant="outline">
+                  {fullDate(updated_at)}
+                </Badge>
+              </Text>
+            )}
           </Group>
-          <Text weight={500} dangerouslySetInnerHTML={{ __html: content }} />
+          <div className={cx(classes.content, "editor-content")}>
+            <div
+              className="view ql-editor"
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
+          </div>
         </Group>
       </Card>
     </MainLayout>

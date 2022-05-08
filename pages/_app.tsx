@@ -1,4 +1,5 @@
 import "../styles/globals.scss";
+import "../styles/editor.scss";
 import type { AppProps } from "next/app";
 import {
   ColorScheme,
