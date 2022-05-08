@@ -8,9 +8,16 @@ const defaultValues: IAuthContext = {
   user: null,
   isAuth: false,
   isLoading: true,
-  login: () => {},
-  logout: () => {},
-  getUser: () => {},
+  login: () =>
+    Promise.resolve({
+      session: null,
+      user: null,
+      error: null,
+    }),
+  logout: () =>
+    Promise.resolve({
+      error: null,
+    }),
 };
 
 const AuthContext = createContext<IAuthContext>(defaultValues);
@@ -22,58 +29,27 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
   const [isLoading, setLoading] = useState<boolean>(true);
 
   const login = async (email: string) => {
-    try {
-      setLoading(true);
-      const { error } = await supabase.auth.signIn(
+    setLoading(true);
+    return await supabase.auth
+      .signIn(
         { email },
         {
           redirectTo: process.env.NEXT_PUBLIC_REDIRECT_URL,
         }
-      );
-      if (error) throw error;
-      alert("Check your email for the login link!");
-    } catch (error: any) {
-      alert(error.error_description || error.message);
-    } finally {
-      setLoading(false);
-    }
+      )
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const logout = async () => {
-    try {
-      setLoading(true);
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-    } catch (error: any) {
-      alert(error.error_description || error.message);
-    } finally {
-      setLoading(false);
+    setLoading(true);
+    return await supabase.auth.signOut().finally(() => {
       setUser(null);
       setAuth(false);
-      router.push("./login");
-    }
-  };
-
-  const getUser = async () => {
-    try {
-      setLoading(true);
-      const user = supabase.auth.user();
-      let { data, error, status } = await supabase
-        .from("profiles")
-        .select(`username, website, avatar_url`)
-        .eq("id", user?.id)
-        .single();
-      if (error && status !== 406) {
-        throw error;
-      }
-      if (data) {
-        setUser(data);
-      }
-    } catch (error: any) {
-      alert(error.message);
-    } finally {
       setLoading(false);
-    }
+      router.push("./login");
+    });
   };
 
   const value = {
@@ -82,7 +58,6 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     isLoading,
     login,
     logout,
-    getUser,
   };
 
   useEffect(() => {

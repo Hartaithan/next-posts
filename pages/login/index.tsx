@@ -18,23 +18,21 @@ const LoginPage: React.FC = () => {
   });
 
   const handleSubmit = async (values: typeof form.values) => {
-    login(values.email);
-    // try {
-    //   const { error } = await supabase.auth.signIn({ email: values.email });
-    //   if (error) throw error;
-    //   showNotification({
-    //     title: "Succsess",
-    //     color: "green",
-    //     message: "Check your email for the login link!",
-    //   });
-    // } catch (error) {
-    //   console.error("handleLogin", error);
-    //   showNotification({
-    //     title: "Error",
-    //     color: "red",
-    //     message: "Login error",
-    //   });
-    // }
+    login(values.email)
+      .then(() => {
+        showNotification({
+          title: "Success",
+          color: "green",
+          message: "Check your email for the login link!",
+        });
+      })
+      .catch(({ error }) => {
+        showNotification({
+          title: "Error",
+          color: "red",
+          message: error.error_description || error.message || "Login error",
+        });
+      });
   };
 
   return (

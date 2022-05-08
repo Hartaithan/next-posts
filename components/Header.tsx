@@ -16,6 +16,7 @@ import { useBooleanToggle } from "@mantine/hooks";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import { useAuth } from "../context/auth";
+import { showNotification } from "@mantine/notifications";
 
 const navigation: IHeaderLink[] = [
   { name: "Home", path: "/" },
@@ -121,6 +122,24 @@ const Header: React.FC = () => {
     </Link>
   ));
 
+  const handleLogout = () => {
+    logout()
+      .then(() => {
+        showNotification({
+          title: "Success",
+          color: "green",
+          message: "Logout successful",
+        });
+      })
+      .catch(({ error }) => {
+        showNotification({
+          title: "Error",
+          color: "red",
+          message: error.error_description || error.message || "Log out error",
+        });
+      });
+  };
+
   return (
     <MantineHeader height={HEADER_HEIGHT} className={classes.root}>
       <Container className={classes.header}>
@@ -130,7 +149,7 @@ const Header: React.FC = () => {
         {isAuth ? (
           <Button
             className={classes.auth}
-            onClick={() => logout()}
+            onClick={() => handleLogout()}
             disabled={isLoading}
           >
             {isLoading ? (
