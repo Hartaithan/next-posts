@@ -24,7 +24,12 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
   const login = async (email: string) => {
     try {
       setLoading(true);
-      const { error } = await supabase.auth.signIn({ email });
+      const { error } = await supabase.auth.signIn(
+        { email },
+        {
+          redirectTo: process.env.NEXT_PUBLIC_REDIRECT_URL,
+        }
+      );
       if (error) throw error;
       alert("Check your email for the login link!");
     } catch (error: any) {
