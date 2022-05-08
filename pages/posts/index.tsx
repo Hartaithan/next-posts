@@ -1,4 +1,4 @@
-import { Grid } from "@mantine/core";
+import { Center, Grid, Text } from "@mantine/core";
 import { InferGetServerSidePropsType, NextPage } from "next";
 import React from "react";
 import PostItem from "../../components/PostItem";
@@ -20,6 +20,11 @@ const Posts: NextPage = ({
   return (
     <MainLayout title={"All posts"}>
       <Grid>
+        {posts.length === 0 && (
+          <Center mt={16} style={{ width: "100%" }}>
+            <Text>No posts have been added yet.</Text>
+          </Center>
+        )}
         {posts.map((item: IPostItem) => (
           <Grid.Col key={item.id} xs={12} lg={4}>
             <PostItem post={item} />
