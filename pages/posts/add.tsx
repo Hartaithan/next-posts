@@ -14,8 +14,10 @@ import {
   IPreviewState,
 } from "../../models/DropzoneModel";
 import { showNotification } from "@mantine/notifications";
+import { useRouter } from "next/router";
 
 const PostAdd: NextPage = () => {
+  const router = useRouter();
   const theme = useMantineTheme();
   const { user } = useAuth();
   const [preview, setPreview] = useState<IPreviewState>({
@@ -32,8 +34,27 @@ const PostAdd: NextPage = () => {
     },
   });
 
-  const handleSubmit = (values: typeof form.values) => {
-    console.log("values", values);
+  const handleSubmit = async (values: typeof form.values) => {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`, {
+      method: "POST",
+      body: JSON.stringify(values),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        showNotification({
+          title: "Success",
+          color: "green",
+          message: res.message,
+        });
+        router.push("/posts");
+      })
+      .catch((error) => {
+        showNotification({
+          title: "Adding post failed",
+          color: "red",
+          message: error.response.message || "Error during upload image",
+        });
+      });
   };
 
   const isValid =
@@ -56,6 +77,11 @@ const PostAdd: NextPage = () => {
       .then((res) => {
         form.setFieldValue("image_url", res.image_url);
         setPreview({ isLoading: false, url: res.image_url });
+        showNotification({
+          title: "Success",
+          color: "green",
+          message: res.message,
+        });
       })
       .catch((error) => {
         showNotification({
