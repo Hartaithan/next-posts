@@ -20,3 +20,11 @@ export interface IPostsResponse {
 export interface IPostResponse {
   post: IPostItem;
 }
+
+export interface IPostPayload {
+  title: string;
+  description: string;
+  content: string;
+  image_url: string | null;
+  user: string | null | undefined;
+}
