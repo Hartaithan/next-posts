@@ -27,15 +27,22 @@ async function updatePostById(req: NextApiRequest, res: NextApiResponse) {
     title: body.title,
     description: body.description,
     content: body.content,
-    author: body.author,
+    image_url: body.image_url,
+    user: body.user,
   };
-  const { error } = await supabase.from("posts").update(payload).eq("id", id);
+  const { data, error } = await supabase
+    .from("posts")
+    .update(payload)
+    .eq("id", id)
+    .single();
   if (error) {
     return res
       .status(400)
       .json({ message: "Error updating post", error: error });
   }
-  return res.status(201).json({ message: "Post successfully updated" });
+  return res
+    .status(201)
+    .json({ message: "Post successfully updated", post: data });
 }
 
 async function deletePostById(req: NextApiRequest, res: NextApiResponse) {
