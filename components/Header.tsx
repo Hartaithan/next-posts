@@ -65,6 +65,9 @@ const useStyles = createStyles((theme) => ({
     [theme.fn.largerThan("sm")]: {
       display: "none",
     },
+    [theme.fn.smallerThan("sm")]: {
+      marginLeft: "12px",
+    },
   },
   link: {
     display: "block",

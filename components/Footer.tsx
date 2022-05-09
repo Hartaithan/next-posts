@@ -5,6 +5,7 @@ import { IFooterLink } from "../models/FooterModel";
 
 const links: IFooterLink[] = [
   {
+    id: 1,
     name: "Hartaithan.",
     path: "https://hartaithan.github.io/",
     isExternal: true,
@@ -28,17 +29,12 @@ const useStyles = createStyles((theme) => ({
       flexDirection: "column",
     },
   },
-  links: {
-    [theme.fn.smallerThan("xs")]: {
-      marginTop: theme.spacing.md,
-    },
-  },
 }));
 
 const Footer: React.FC = () => {
   const { classes } = useStyles();
   const items = links.map((link) => (
-    <Link key={link.name} href={link.path} passHref>
+    <Link key={link.id} href={link.path} passHref>
       <Anchor<"a">
         color="dimmed"
         size="sm"
@@ -52,7 +48,7 @@ const Footer: React.FC = () => {
   return (
     <footer className={classes.footer}>
       <Container className={classes.inner}>
-        <Group className={classes.links}>{items}</Group>
+        <Group>{items}</Group>
       </Container>
     </footer>
   );
