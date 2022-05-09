@@ -1,6 +1,5 @@
 import { Center, Grid, Text } from "@mantine/core";
 import { InferGetServerSidePropsType, NextPage } from "next";
-import React from "react";
 import PostItem from "../../components/PostItem";
 import MainLayout from "../../layouts/MainLayout";
 import { GetServerSideProps } from "next";

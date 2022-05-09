@@ -1,5 +1,5 @@
 import { Container, createStyles } from "@mantine/core";
-import React from "react";
+import { FC } from "react";
 import { IMainContainerProps } from "../models/MainLayoutModel";
 
 const useStyles = createStyles(() => ({
@@ -10,7 +10,7 @@ const useStyles = createStyles(() => ({
   },
 }));
 
-const MainContainer: React.FC<IMainContainerProps> = ({ children }) => {
+const MainContainer: FC<IMainContainerProps> = ({ children }) => {
   const { classes } = useStyles();
   return <Container className={classes.container}>{children}</Container>;
 };

@@ -1,8 +1,8 @@
-import React from "react";
+import { FC } from "react";
 import { useMantineColorScheme, ActionIcon, Group } from "@mantine/core";
 import { Sun, MoonStars } from "tabler-icons-react";
 
-const ThemeToggle: React.FC = () => {
+const ThemeToggle: FC = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   return (
     <Group position="center" my="xl">

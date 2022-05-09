@@ -1,5 +1,5 @@
+import { FC } from "react";
 import Link from "next/link";
-import React from "react";
 import { createStyles, Container, Group, Anchor } from "@mantine/core";
 import { IFooterLink } from "../models/FooterModel";
 
@@ -31,7 +31,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const Footer: React.FC = () => {
+const Footer: FC = () => {
   const { classes } = useStyles();
   const items = links.map((link) => (
     <Link key={link.id} href={link.path} passHref>

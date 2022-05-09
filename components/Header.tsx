@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { useRouter } from "next/router";
 import { IHeaderLink } from "../models/HeaderModel";
 import {
@@ -104,7 +104,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const Header: React.FC = () => {
+const Header: FC = () => {
   const router = useRouter();
   const { isAuth, isLoading, logout } = useAuth();
   const [opened, toggleOpened] = useBooleanToggle(false);

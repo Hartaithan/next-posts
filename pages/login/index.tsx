@@ -1,11 +1,14 @@
 import { useForm } from "@mantine/hooks";
 import { TextInput, Text, Paper, Group, Button, Center } from "@mantine/core";
-import React from "react";
 import MainLayout from "../../layouts/MainLayout";
 import { showNotification } from "@mantine/notifications";
 import { useAuth } from "../../context/auth";
 import { supabase } from "../../utils/supabaseClient";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage,
+} from "next";
 import useOnceEffect from "../../hooks/useOnceEffect";
 
 export const getServerSideProps: GetServerSideProps = async ({
@@ -22,7 +25,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   };
 };
 
-const LoginPage: React.FC = ({
+const LoginPage: NextPage = ({
   auth,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { login } = useAuth();

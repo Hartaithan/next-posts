@@ -1,6 +1,6 @@
 import { Card, Text, Group, createStyles } from "@mantine/core";
 import Link from "next/link";
-import React from "react";
+import { FC } from "react";
 import { CalendarTime, UserCircle } from "tabler-icons-react";
 import { onlyDate } from "../helpers/date";
 import { IPostItemProps } from "../models/PostModel";
@@ -47,7 +47,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const PostItem: React.FC<IPostItemProps> = (props) => {
+const PostItem: FC<IPostItemProps> = (props) => {
   const { id, created_at, image_url, title, description, user } = props.post;
   const { classes } = useStyles();
 
