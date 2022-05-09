@@ -2,6 +2,8 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #2c2e33 white;
 }
 
 html,
@@ -9,9 +11,24 @@ body,
 #__next {
   height: 100%;
   width: 100%;
+  scrollbar-gutter: stable;
 }
 
 #__next {
   display: flex;
   flex-direction: column;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2c2e33;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2c2e33;
 }

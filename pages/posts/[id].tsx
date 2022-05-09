@@ -4,7 +4,6 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import Editor from "../../components/Editor";
 import ImageFallback from "../../components/ImageFallback";
 import { fullDate } from "../../helpers/date";
 import MainLayout from "../../layouts/MainLayout";

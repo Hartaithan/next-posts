@@ -6,6 +6,7 @@ const useStyles = createStyles(() => ({
   container: {
     flexGrow: 1,
     width: "100%",
+    scrollbarGutter: "stable both-edges",
   },
 }));
 
