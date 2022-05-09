@@ -1,4 +1,4 @@
-import { User } from "@supabase/supabase-js";
+import { AuthChangeEvent, Session, User } from "@supabase/supabase-js";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 import { IAuthContext, IAuthProviderProps } from "../models/AuthModel";
@@ -52,6 +52,18 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     });
   };
 
+  const handleAuthChange = async (
+    event: AuthChangeEvent,
+    session: Session | null
+  ) => {
+    await fetch("/api/auth", {
+      method: "POST",
+      headers: new Headers({ "Content-Type": "application/json" }),
+      credentials: "same-origin",
+      body: JSON.stringify({ event, session }),
+    });
+  };
+
   const value = {
     user,
     isAuth,
@@ -61,21 +73,27 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
   };
 
   useEffect(() => {
-    const session = supabase.auth.session();
-    if (session?.user) {
-      setUser(session.user);
+    const user = supabase.auth.user();
+    if (user) {
+      setUser(user);
       setAuth(true);
     }
     setLoading(false);
-    supabase.auth.onAuthStateChange((_event, session) => {
-      if (_event == "SIGNED_IN" && session) {
-        setUser(session.user);
-        setAuth(true);
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        handleAuthChange(_event, session);
+        if (_event == "SIGNED_IN" && session) {
+          setUser(session.user);
+          setAuth(true);
+        }
+        if (_event == "SIGNED_OUT") {
+          router.push("./login");
+        }
       }
-      if (_event == "SIGNED_OUT") {
-        router.push("./login");
-      }
-    });
+    );
+    return () => {
+      authListener?.unsubscribe();
+    };
   }, []); // eslint-disable-line
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

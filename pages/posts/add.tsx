@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Group, TextInput, useMantineTheme } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { useAuth } from "../../context/auth";
 import MainLayout from "../../layouts/MainLayout";
 import Editor from "../../components/Editor";
@@ -15,6 +15,17 @@ import {
 } from "../../models/DropzoneModel";
 import { showNotification } from "@mantine/notifications";
 import { useRouter } from "next/router";
+import { supabase } from "../../utils/supabaseClient";
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const { user } = await supabase.auth.api.getUserByCookie(req);
+  if (!user) {
+    return { props: {}, redirect: { destination: "/login?auth=false" } };
+  }
+  return {
+    props: {},
+  };
+};
 
 const PostAdd: NextPage = () => {
   const router = useRouter();
@@ -37,9 +48,7 @@ const PostAdd: NextPage = () => {
   const handleSubmit = async (values: typeof form.values) => {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: new Headers({ "Content-Type": "application/json" }),
       body: JSON.stringify(values),
     })
       .then((res) => res.json())
