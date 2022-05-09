@@ -2,11 +2,29 @@ import { useForm } from "@mantine/hooks";
 import { TextInput, Text, Paper, Group, Button, Center } from "@mantine/core";
 import React from "react";
 import MainLayout from "../../layouts/MainLayout";
-import { supabase } from "../../utils/supabaseClient";
 import { showNotification } from "@mantine/notifications";
 import { useAuth } from "../../context/auth";
+import { supabase } from "../../utils/supabaseClient";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import useOnceEffect from "../../hooks/useOnceEffect";
 
-const LoginPage: React.FC = () => {
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  query,
+}) => {
+  const { user } = await supabase.auth.api.getUserByCookie(req);
+  const auth = query?.auth ? query.auth : null;
+  if (user) {
+    return { props: { auth }, redirect: { destination: "/" } };
+  }
+  return {
+    props: { auth },
+  };
+};
+
+const LoginPage: React.FC = ({
+  auth,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { login } = useAuth();
   const form = useForm({
     initialValues: {
@@ -15,6 +33,16 @@ const LoginPage: React.FC = () => {
     validationRules: {
       email: (val) => /^\S+@\S+$/.test(val),
     },
+  });
+
+  useOnceEffect(() => {
+    if (auth) {
+      showNotification({
+        title: "Access denied",
+        color: "blue",
+        message: "You must be logged in to access this page.",
+      });
+    }
   });
 
   const handleSubmit = async (values: typeof form.values) => {
