@@ -9,12 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mantine/core": "^4.2.2",
-    "@mantine/dropzone": "^4.2.2",
-    "@mantine/hooks": "^4.2.2",
-    "@mantine/next": "^4.2.2",
-    "@mantine/notifications": "^4.2.2",
-    "@mantine/rte": "^4.2.2",
+    "@mantine/core": "^4.2.4",
+    "@mantine/dropzone": "^4.2.4",
+    "@mantine/hooks": "^4.2.4",
+    "@mantine/next": "^4.2.4",
+    "@mantine/notifications": "^4.2.4",
+    "@mantine/rte": "^4.2.4",
     "@supabase/supabase-js": "^1.35.2",
     "cloudinary": "^1.29.1",
     "formidable": "^2.0.1",
