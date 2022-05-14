@@ -6,7 +6,6 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import { useAuth } from "../../context/auth";
 import MainLayout from "../../layouts/MainLayout";
 import Editor from "../../components/Editor";
 import { IPostPayload } from "../../models/PostModel";
