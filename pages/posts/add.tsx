@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { Button, Group, TextInput, useMantineTheme } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
-import { GetServerSideProps, NextPage } from "next";
+import {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage,
+} from "next";
 import { useAuth } from "../../context/auth";
 import MainLayout from "../../layouts/MainLayout";
 import Editor from "../../components/Editor";
@@ -23,14 +27,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     return { props: {}, redirect: { destination: "/login?auth=false" } };
   }
   return {
-    props: {},
+    props: { user },
   };
 };
 
-const PostAdd: NextPage = () => {
+const PostAdd: NextPage = ({
+  user,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const theme = useMantineTheme();
-  const { user } = useAuth();
   const [preview, setPreview] = useState<IPreviewState>({
     isLoading: false,
     url: null,
