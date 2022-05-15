@@ -24,8 +24,8 @@ import { supabase } from "../../utils/supabaseClient";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const id = context.params?.id;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`);
   const { user } = await supabase.auth.api.getUserByCookie(context.req);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`);
   const { post }: IPostResponse = await res.json();
   return {
     props: { id, post, user },
