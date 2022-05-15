@@ -9,6 +9,7 @@ import {
 import { useLocalStorage } from "@mantine/hooks";
 import { NotificationsProvider } from "@mantine/notifications";
 import { AuthProvider } from "../context/auth";
+import { ModalsProvider } from "@mantine/modals";
 
 const MyApp = (props: AppProps) => {
   const { Component, pageProps } = props;
@@ -31,9 +32,11 @@ const MyApp = (props: AppProps) => {
         theme={{ colorScheme }}
       >
         <NotificationsProvider>
-          <AuthProvider>
-            <Component {...pageProps} />
-          </AuthProvider>
+          <ModalsProvider>
+            <AuthProvider>
+              <Component {...pageProps} />
+            </AuthProvider>
+          </ModalsProvider>
         </NotificationsProvider>
       </MantineProvider>
     </ColorSchemeProvider>

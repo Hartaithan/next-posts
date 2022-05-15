@@ -1,9 +1,21 @@
-import { Badge, Card, createStyles, Group, Text, Title } from "@mantine/core";
+import {
+  Badge,
+  Button,
+  Card,
+  createStyles,
+  Group,
+  Menu,
+  Text,
+  Title,
+} from "@mantine/core";
+import { useModals } from "@mantine/modals";
+import { NextLink } from "@mantine/next";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
+import { Dots, Edit, Settings, Trash } from "tabler-icons-react";
 import ImageFallback from "../../components/ImageFallback";
 import { fullDate } from "../../helpers/date";
 import MainLayout from "../../layouts/MainLayout";
@@ -14,7 +26,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`);
   const { post }: IPostResponse = await res.json();
   return {
-    props: { post },
+    props: { post, id },
   };
 };
 
@@ -59,13 +71,25 @@ const useStyles = createStyles((theme) => ({
     width: "100%",
     " > div": {
       padding: "0 !important",
+      position: "relative",
     },
+  },
+  menu: {
+    position: "absolute",
+    top: "20px",
+    right: "20px",
+  },
+  button: {
+    padding: "5px",
+    background: "transparent !important",
   },
 }));
 
 const Post: NextPage = ({
   post,
+  id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const modals = useModals();
   const { classes, cx } = useStyles();
   const {
     created_at,
@@ -76,6 +100,18 @@ const Post: NextPage = ({
     content,
     user,
   } = post;
+
+  const confirmDeleteModal = () =>
+    modals.openConfirmModal({
+      title: "Confirm deletion",
+      children: (
+        <Text size="sm">Are you sure you want to delete this post?</Text>
+      ),
+      labels: { confirm: "Confirm", cancel: "Cancel" },
+      centered: true,
+      onCancel: () => console.log("Cancel"),
+      onConfirm: () => console.log("Confirmed"),
+    });
 
   return (
     <MainLayout title={title}>
@@ -92,6 +128,29 @@ const Post: NextPage = ({
             <Text size="xl">
               {description ? description : "Description not found"}
             </Text>
+            <Menu
+              className={classes.menu}
+              control={
+                <Button className={classes.button}>
+                  <Dots size={28} />
+                </Button>
+              }
+            >
+              <Menu.Item
+                icon={<Edit size={14} />}
+                component={NextLink}
+                href={`/posts/edit/${id}`}
+              >
+                Edit post
+              </Menu.Item>
+              <Menu.Item
+                color="red"
+                icon={<Trash size={14} />}
+                onClick={confirmDeleteModal}
+              >
+                Delete post
+              </Menu.Item>
+            </Menu>
           </Group>
         </Card.Section>
         <Group className={classes.post}>

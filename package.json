@@ -12,6 +12,7 @@
     "@mantine/core": "^4.2.4",
     "@mantine/dropzone": "^4.2.4",
     "@mantine/hooks": "^4.2.4",
+    "@mantine/modals": "^4.2.4",
     "@mantine/next": "^4.2.4",
     "@mantine/notifications": "^4.2.4",
     "@mantine/rte": "^4.2.4",
