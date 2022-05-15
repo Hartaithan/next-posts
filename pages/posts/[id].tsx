@@ -15,18 +15,20 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import { Dots, Edit, Settings, Trash } from "tabler-icons-react";
+import { Dots, Edit, Trash } from "tabler-icons-react";
 import ImageFallback from "../../components/ImageFallback";
 import { fullDate } from "../../helpers/date";
 import MainLayout from "../../layouts/MainLayout";
 import { IPostResponse } from "../../models/PostModel";
+import { supabase } from "../../utils/supabaseClient";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const id = context.params?.id;
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`);
+  const { user } = await supabase.auth.api.getUserByCookie(context.req);
   const { post }: IPostResponse = await res.json();
   return {
-    props: { post, id },
+    props: { id, post, user },
   };
 };
 
@@ -86,20 +88,14 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const Post: NextPage = ({
-  post,
   id,
+  post,
+  user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const modals = useModals();
   const { classes, cx } = useStyles();
-  const {
-    created_at,
-    updated_at,
-    image_url,
-    title,
-    description,
-    content,
-    user,
-  } = post;
+  const { created_at, updated_at, image_url, title, description, content } =
+    post;
 
   const confirmDeleteModal = () =>
     modals.openConfirmModal({
@@ -128,29 +124,31 @@ const Post: NextPage = ({
             <Text size="xl">
               {description ? description : "Description not found"}
             </Text>
-            <Menu
-              className={classes.menu}
-              control={
-                <Button className={classes.button}>
-                  <Dots size={28} />
-                </Button>
-              }
-            >
-              <Menu.Item
-                icon={<Edit size={14} />}
-                component={NextLink}
-                href={`/posts/edit/${id}`}
+            {post.user === user.email && (
+              <Menu
+                className={classes.menu}
+                control={
+                  <Button className={classes.button}>
+                    <Dots size={28} />
+                  </Button>
+                }
               >
-                Edit post
-              </Menu.Item>
-              <Menu.Item
-                color="red"
-                icon={<Trash size={14} />}
-                onClick={confirmDeleteModal}
-              >
-                Delete post
-              </Menu.Item>
-            </Menu>
+                <Menu.Item
+                  icon={<Edit size={14} />}
+                  component={NextLink}
+                  href={`/posts/edit/${id}`}
+                >
+                  Edit post
+                </Menu.Item>
+                <Menu.Item
+                  color="red"
+                  icon={<Trash size={14} />}
+                  onClick={confirmDeleteModal}
+                >
+                  Delete post
+                </Menu.Item>
+              </Menu>
+            )}
           </Group>
         </Card.Section>
         <Group className={classes.post}>
@@ -158,7 +156,7 @@ const Post: NextPage = ({
             <Text weight={500}>
               Author:&nbsp;&nbsp;
               <Badge color="gray" variant="outline">
-                {user ? user : "Unknown"}
+                {post.user ? post.user : "Unknown"}
               </Badge>
             </Text>
             <Text weight={500}>
