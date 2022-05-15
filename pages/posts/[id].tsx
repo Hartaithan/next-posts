@@ -28,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`);
   const { post }: IPostResponse = await res.json();
   return {
-    props: { id, post, user },
+    props: { id, post, user: user ? user : null },
   };
 };
 
@@ -124,7 +124,7 @@ const Post: NextPage = ({
             <Text size="xl">
               {description ? description : "Description not found"}
             </Text>
-            {post.user === user.email && (
+            {post.user === user?.email && (
               <Menu
                 className={classes.menu}
                 control={
