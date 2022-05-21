@@ -17,16 +17,14 @@ const Home: NextPage = () => {
   return (
     <MainLayout title={"Home"}>
       {posts.length === 1 && (
-        <Grid>
-          {posts.map((item) => (
-            <Grid.Col key={item.id} xs={12}>
-              <Skeleton
-                height={SECONDARY_COL_HEIGHT}
-                radius="md"
-                animate={false}
-              />
-            </Grid.Col>
-          ))}
+        <Grid gutter="md">
+          <Grid.Col xs={12}>
+            <Skeleton
+              height={SECONDARY_COL_HEIGHT}
+              radius="md"
+              animate={false}
+            />
+          </Grid.Col>
         </Grid>
       )}
       {posts.length === 2 && (
@@ -50,20 +48,20 @@ const Home: NextPage = () => {
         >
           <Skeleton height={PRIMARY_COL_HEIGHT} radius="md" animate={false} />
           <Grid gutter="md">
-            <Grid.Col>
-              <Skeleton
-                height={SECONDARY_COL_HEIGHT}
-                radius="md"
-                animate={false}
-              />
-            </Grid.Col>
-            <Grid.Col>
-              <Skeleton
-                height={SECONDARY_COL_HEIGHT}
-                radius="md"
-                animate={false}
-              />
-            </Grid.Col>
+            {posts.map((item, index) => {
+              if (index === 0) {
+                return null;
+              }
+              return (
+                <Grid.Col key={item.id}>
+                  <Skeleton
+                    height={SECONDARY_COL_HEIGHT}
+                    radius="md"
+                    animate={false}
+                  />
+                </Grid.Col>
+              );
+            })}
           </Grid>
         </SimpleGrid>
       )}
@@ -75,27 +73,20 @@ const Home: NextPage = () => {
         >
           <Skeleton height={PRIMARY_COL_HEIGHT} radius="md" animate={false} />
           <Grid gutter="md">
-            <Grid.Col>
-              <Skeleton
-                height={SECONDARY_COL_HEIGHT}
-                radius="md"
-                animate={false}
-              />
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Skeleton
-                height={SECONDARY_COL_HEIGHT}
-                radius="md"
-                animate={false}
-              />
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Skeleton
-                height={SECONDARY_COL_HEIGHT}
-                radius="md"
-                animate={false}
-              />
-            </Grid.Col>
+            {posts.map((item, index) => {
+              if (index === 0) {
+                return null;
+              }
+              return (
+                <Grid.Col key={item.id} span={index === 1 ? 12 : 6}>
+                  <Skeleton
+                    height={SECONDARY_COL_HEIGHT}
+                    radius="md"
+                    animate={false}
+                  />
+                </Grid.Col>
+              );
+            })}
           </Grid>
         </SimpleGrid>
       )}
