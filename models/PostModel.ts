@@ -10,6 +10,8 @@ export interface IPostItem {
 }
 
 export interface IPostItemProps {
+  height?: number;
+  main?: boolean;
   post: IPostItem;
 }
 
