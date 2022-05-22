@@ -1,8 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { supabase } from "../../../utils/supabaseClient";
 
-async function getAllPosts(res: NextApiResponse) {
-  const { data, error } = await supabase.from("posts").select("*");
+async function getAllPosts(req: NextApiRequest, res: NextApiResponse) {
+  const {
+    query: { limit },
+  } = req;
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .limit(Number(limit));
   if (error) {
     return res
       .status(400)
@@ -41,7 +47,7 @@ export default async function handler(
   const { method } = req;
   switch (method) {
     case "GET":
-      return getAllPosts(res);
+      return getAllPosts(req, res);
     case "POST":
       return addPost(req, res);
     default:
