@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import { Center, InputWrapper, Loader } from "@mantine/core";
 import type { RichTextEditorProps } from "@mantine/rte";
+import { useCallback } from "react";
 
 const RichTextEditor = dynamic(() => import("@mantine/rte"), {
   ssr: false,
@@ -12,7 +13,7 @@ const RichTextEditor = dynamic(() => import("@mantine/rte"), {
 });
 
 const Editor = (props: RichTextEditorProps) => {
-  const handleImageUpload = (file: File): Promise<string> => {
+  const handleImageUpload = useCallback((file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const fd = new FormData();
       fd.append("file", file);
@@ -24,7 +25,7 @@ const Editor = (props: RichTextEditorProps) => {
         .then((res) => resolve(res.image_url))
         .catch(() => reject(new Error("Upload failed")));
     });
-  };
+  }, []);
 
   return (
     <InputWrapper required label="Content" mt={12}>

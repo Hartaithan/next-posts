@@ -55,6 +55,9 @@
     counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8
       list-9;
   }
+  .ql-editor p > img {
+    max-width: 100%;
+  }
   .ql-editor pre {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
       Liberation Mono, Courier New, monospace;
