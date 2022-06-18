@@ -7,7 +7,7 @@ async function getPostById(req: NextApiRequest, res: NextApiResponse) {
   } = req;
   const { data, error } = await supabase
     .from("posts")
-    .select("*")
+    .select("*, comments(*)")
     .eq("id", id)
     .single();
   if (error) {

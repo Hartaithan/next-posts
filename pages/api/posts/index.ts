@@ -5,16 +5,16 @@ async function getAllPosts(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { limit },
   } = req;
-  const { data, error } = await supabase
+  const { data: posts, error: postsError } = await supabase
     .from("posts")
-    .select("*")
+    .select("*, comments(*)")
     .limit(Number(limit));
-  if (error) {
+  if (postsError) {
     return res
       .status(400)
-      .json({ message: "Error fetching posts", error: error });
+      .json({ message: "Error fetching posts", error: postsError });
   }
-  return res.status(200).json({ posts: data });
+  return res.status(200).json({ posts });
 }
 
 async function addPost(req: NextApiRequest, res: NextApiResponse) {

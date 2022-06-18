@@ -28,7 +28,7 @@ async function deleteCommentById(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { id },
   } = req;
-  const { error } = await supabase.from("comment").delete().eq("id", id);
+  const { error } = await supabase.from("comments").delete().eq("id", id);
   if (error) {
     return res
       .status(400)
