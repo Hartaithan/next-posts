@@ -1,3 +1,5 @@
+import { ICommentItem } from "./CommentModel";
+
 export interface IPostItem {
   id: number;
   created_at: string;
@@ -7,6 +9,7 @@ export interface IPostItem {
   description: string;
   content: string;
   user: string;
+  comments: ICommentItem[];
 }
 
 export interface IPostItemProps {

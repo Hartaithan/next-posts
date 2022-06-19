@@ -10,6 +10,7 @@ import {
 } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import { NextLink } from "@mantine/next";
+import { User } from "@supabase/supabase-js";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
@@ -19,10 +20,18 @@ import { Dots, Edit, Trash } from "tabler-icons-react";
 import ImageFallback from "../../components/ImageFallback";
 import { fullDate } from "../../helpers/date";
 import MainLayout from "../../layouts/MainLayout";
-import { IPostResponse } from "../../models/PostModel";
+import { IPostItem, IPostResponse } from "../../models/PostModel";
 import { supabase } from "../../utils/supabaseClient";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+interface IPostPageProps {
+  id: string | string[] | undefined;
+  post: IPostItem;
+  user: User | null;
+}
+
+export const getServerSideProps: GetServerSideProps<IPostPageProps> = async (
+  context
+) => {
   const id = context.params?.id;
   const { user } = await supabase.auth.api.getUserByCookie(context.req);
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`);
@@ -87,11 +96,8 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const Post: NextPage = ({
-  id,
-  post,
-  user,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Post: NextPage<IPostPageProps> = (props) => {
+  const { id, post, user } = props;
   const modals = useModals();
   const { classes, cx } = useStyles();
   const { created_at, updated_at, image_url, title, description, content } =
