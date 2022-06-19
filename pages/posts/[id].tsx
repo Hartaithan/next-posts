@@ -17,6 +17,7 @@ import {
   NextPage,
 } from "next";
 import { Dots, Edit, Trash } from "tabler-icons-react";
+import CommentsSection from "../../components/CommentsSection";
 import ImageFallback from "../../components/ImageFallback";
 import { fullDate } from "../../helpers/date";
 import MainLayout from "../../layouts/MainLayout";
@@ -102,8 +103,15 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   const { id, post, user } = props;
   const modals = useModals();
   const { classes, cx } = useStyles();
-  const { created_at, updated_at, image_url, title, description, content } =
-    post;
+  const {
+    created_at,
+    updated_at,
+    image_url,
+    title,
+    description,
+    content,
+    comments,
+  } = post;
 
   const confirmDeleteModal = () =>
     modals.openConfirmModal({
@@ -190,6 +198,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           </div>
         </Group>
       </Card>
+      <CommentsSection comments={comments} />
     </MainLayout>
   );
 };
