@@ -96,7 +96,9 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const Post: NextPage<IPostPageProps> = (props) => {
+const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
+  props
+) => {
   const { id, post, user } = props;
   const modals = useModals();
   const { classes, cx } = useStyles();

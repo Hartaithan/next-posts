@@ -11,7 +11,11 @@ import {
 } from "next";
 import useOnceEffect from "../../hooks/useOnceEffect";
 
-export const getServerSideProps: GetServerSideProps = async ({
+interface ILoginPageProps {
+  auth: string | string[] | null;
+}
+
+export const getServerSideProps: GetServerSideProps<ILoginPageProps> = async ({
   req,
   query,
 }) => {
@@ -25,9 +29,10 @@ export const getServerSideProps: GetServerSideProps = async ({
   };
 };
 
-const LoginPage: NextPage = ({
-  auth,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const LoginPage: NextPage<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = (props) => {
+  const { auth } = props;
   const { login } = useAuth();
   const form = useForm({
     initialValues: {

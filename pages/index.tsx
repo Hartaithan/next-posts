@@ -8,7 +8,13 @@ import PostGridItem from "../components/PostIGridtem";
 import MainLayout from "../layouts/MainLayout";
 import { IPostItem, IPostsResponse } from "../models/PostModel";
 
-export const getServerSideProps: GetServerSideProps = async () => {
+interface IHomePageProps {
+  posts: IPostItem[];
+}
+
+export const getServerSideProps: GetServerSideProps<
+  IHomePageProps
+> = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?limit=4`);
   const { posts }: IPostsResponse = await res.json();
   return {
@@ -18,9 +24,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
 const PRIMARY_COL_HEIGHT = 400;
 
-const Home: NextPage = ({
-  posts,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
+  props
+) => {
+  const { posts } = props;
   const theme = useMantineTheme();
   const SECONDARY_COL_HEIGHT = PRIMARY_COL_HEIGHT / 2 - theme.spacing.md / 2;
   return (
