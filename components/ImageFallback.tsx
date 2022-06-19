@@ -1,8 +1,12 @@
 import Image, { ImageProps } from "next/image";
 import { FC, useState } from "react";
 
-const ImageFallback: FC<ImageProps> = (props) => {
-  const { src, ...rest } = props;
+interface IImageProps extends ImageProps {
+  background?: boolean;
+}
+
+const ImageFallback: FC<IImageProps> = (props) => {
+  const { src, background = false, ...rest } = props;
   const [img, setImg] = useState(src ? src : "/img/post_placeholder.jpg");
   return (
     <Image
@@ -16,6 +20,7 @@ const ImageFallback: FC<ImageProps> = (props) => {
           setImg("./img/post_placeholder.jpg");
         }
       }}
+      style={background ? { zIndex: 0 } : {}}
     />
   );
 };

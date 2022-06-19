@@ -4,8 +4,9 @@ import { FC } from "react";
 import { CalendarTime, UserCircle } from "tabler-icons-react";
 import { onlyDate } from "../helpers/date";
 import { IPostItemProps } from "../models/PostModel";
+import ImageFallback from "./ImageFallback";
 
-const useStyles = createStyles((theme, { height, post }: IPostItemProps) => {
+const useStyles = createStyles((theme, { height }: IPostItemProps) => {
   return {
     card: {
       height: `${height}px`,
@@ -16,6 +17,9 @@ const useStyles = createStyles((theme, { height, post }: IPostItemProps) => {
       transition: "transform 0.3s ease-in",
     },
     mainCard: {
+      position: "relative",
+      overflow: "hidden",
+      zIndex: 1,
       height: `${height}px`,
       display: "flex",
       flexDirection: "column",
@@ -24,7 +28,15 @@ const useStyles = createStyles((theme, { height, post }: IPostItemProps) => {
       backgroundSize: "cover",
       backgroundPosition: "center",
       cursor: "pointer",
-      backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,1) 95%, rgba(0,0,0,1) 100%), url(${post.image_url})`,
+    },
+    overlay: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      height: `${height}px`,
+      width: "100%",
+      zIndex: 1,
+      backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,1) 95%, rgba(0,0,0,1) 100%)`,
     },
     section: {
       height: "180px",
@@ -70,18 +82,21 @@ const useStyles = createStyles((theme, { height, post }: IPostItemProps) => {
     },
     wrapper: {
       width: "100%",
+      position: "relative",
+      zIndex: 2,
     },
   };
 });
 
 const PostGridItem: FC<IPostItemProps> = (props) => {
-  const { id, created_at, title, description, user } = props.post;
+  const { id, created_at, title, description, user, image_url } = props.post;
   const { classes } = useStyles(props);
 
   if (props.main) {
     return (
       <Link href={`/posts/${id}`} passHref>
         <Paper shadow="md" p="xl" radius="md" className={classes.mainCard}>
+          <div className={classes.overlay} />
           <div className={classes.wrapper}>
             <Title order={3} className={classes.title}>
               {title ? title : "Title not found"}
@@ -104,6 +119,13 @@ const PostGridItem: FC<IPostItemProps> = (props) => {
               </Text>
             </Group>
           </div>
+          <ImageFallback
+            background
+            src={image_url}
+            layout="fill"
+            objectFit="cover"
+            alt="post preview"
+          />
         </Paper>
       </Link>
     );
@@ -112,6 +134,7 @@ const PostGridItem: FC<IPostItemProps> = (props) => {
   return (
     <Link href={`/posts/${id}`} passHref>
       <Paper shadow="md" p="xl" radius="md" className={classes.mainCard}>
+        <div className={classes.overlay} />
         <div className={classes.wrapper}>
           <Title order={3} className={classes.title}>
             {title ? title : "Title not found"}
@@ -120,6 +143,13 @@ const PostGridItem: FC<IPostItemProps> = (props) => {
             {description ? description : "Description not found"}
           </Text>
         </div>
+        <ImageFallback
+          background
+          src={image_url}
+          layout="fill"
+          objectFit="cover"
+          alt="post preview"
+        />
       </Paper>
     </Link>
   );
