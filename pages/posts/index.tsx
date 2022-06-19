@@ -5,7 +5,13 @@ import MainLayout from "../../layouts/MainLayout";
 import { GetServerSideProps } from "next";
 import { IPostItem, IPostsResponse } from "../../models/PostModel";
 
-export const getServerSideProps: GetServerSideProps = async () => {
+interface IPostsPageProps {
+  posts: IPostItem[];
+}
+
+export const getServerSideProps: GetServerSideProps<
+  IPostsPageProps
+> = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`);
   const { posts }: IPostsResponse = await res.json();
   return {
@@ -13,9 +19,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
   };
 };
 
-const Posts: NextPage = ({
-  posts,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Posts: NextPage<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = (props) => {
+  const { posts } = props;
   return (
     <MainLayout title={"All posts"}>
       <Grid>

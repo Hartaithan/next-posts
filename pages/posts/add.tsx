@@ -5,6 +5,7 @@ import {
   GetServerSideProps,
   InferGetServerSidePropsType,
   NextPage,
+  Redirect,
 } from "next";
 import MainLayout from "../../layouts/MainLayout";
 import Editor from "../../components/Editor";
@@ -19,20 +20,32 @@ import {
 import { showNotification } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { supabase } from "../../utils/supabaseClient";
+import { User } from "@supabase/supabase-js";
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+interface IPostAddPageProps {
+  user: User | null;
+}
+
+export const getServerSideProps: GetServerSideProps<IPostAddPageProps> = async (
+  context
+) => {
+  const { req } = context;
   const { user } = await supabase.auth.api.getUserByCookie(req);
   if (!user) {
-    return { props: {}, redirect: { destination: "/login?auth=false" } };
+    return {
+      props: {} as IPostAddPageProps,
+      redirect: { destination: "/login?auth=false" },
+    };
   }
   return {
     props: { user },
   };
 };
 
-const PostAdd: NextPage = ({
-  user,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const PostAdd: NextPage<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = (props) => {
+  const { user } = props;
   const router = useRouter();
   const theme = useMantineTheme();
   const [preview, setPreview] = useState<IPreviewState>({

@@ -2,6 +2,7 @@ import { Button, Group, TextInput, useMantineTheme } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { useForm } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
+import { User } from "@supabase/supabase-js";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
@@ -17,26 +18,41 @@ import {
   IDropzoneRejectedFile,
   IPreviewState,
 } from "../../../models/DropzoneModel";
-import { IPostPayload, IPostResponse } from "../../../models/PostModel";
+import {
+  IPostItem,
+  IPostPayload,
+  IPostResponse,
+} from "../../../models/PostModel";
 import { supabase } from "../../../utils/supabaseClient";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+interface IEditPostPageProps {
+  id: string | string[] | undefined;
+  post: IPostItem;
+  user: User | null;
+}
+
+export const getServerSideProps: GetServerSideProps<
+  IEditPostPageProps
+> = async (context) => {
   const id = context.params?.id;
   const { user } = await supabase.auth.api.getUserByCookie(context.req);
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`);
   const { post }: IPostResponse = await res.json();
   if (!user) {
-    return { props: {}, redirect: { destination: "/login?auth=false" } };
+    return {
+      props: {} as IEditPostPageProps,
+      redirect: { destination: "/login?auth=false" },
+    };
   }
   return {
     props: { id, post, user },
   };
 };
 
-const EditPost: NextPage = ({
-  id,
-  post,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const EditPost: NextPage<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = (props) => {
+  const { id, post } = props;
   const router = useRouter();
   const theme = useMantineTheme();
   const [preview, setPreview] = useState<IPreviewState>({
