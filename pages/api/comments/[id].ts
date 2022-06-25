@@ -1,6 +1,22 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { supabase } from "../../../utils/supabaseClient";
 
+async function getCommentsByPostId(req: NextApiRequest, res: NextApiResponse) {
+  const {
+    query: { id },
+  } = req;
+  const { data, error } = await supabase
+    .from("comments")
+    .select("*")
+    .eq("post_id", id);
+  if (error) {
+    return res
+      .status(400)
+      .json({ message: "Error fetching comments", error: error });
+  }
+  return res.status(200).json({ comments: data });
+}
+
 async function updateCommentById(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { id },
@@ -43,12 +59,14 @@ export default async function handler(
 ) {
   const { method } = req;
   switch (method) {
+    case "GET":
+      return getCommentsByPostId(req, res);
     case "PUT":
       return updateCommentById(req, res);
     case "DELETE":
       return deleteCommentById(req, res);
     default:
-      res.setHeader("Allow", ["PUT", "DELETE"]);
+      res.setHeader("Allow", ["GET", "PUT", "DELETE"]);
       return res.status(405).end(`Method ${method} Not Allowed`);
   }
 }
