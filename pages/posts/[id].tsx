@@ -17,6 +17,7 @@ import {
   NextPage,
 } from "next";
 import { Dots, Edit, Trash } from "tabler-icons-react";
+import CommentInput from "../../components/CommentInput";
 import CommentsSection from "../../components/CommentsSection";
 import ImageFallback from "../../components/ImageFallback";
 import { fullDate } from "../../helpers/date";
@@ -198,6 +199,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           </div>
         </Group>
       </Card>
+      {user && <CommentInput post_id={id} user={user} />}
       <CommentsSection comments={comments} />
     </MainLayout>
   );
