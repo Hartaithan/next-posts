@@ -50,7 +50,7 @@ async function deleteCommentById(req: NextApiRequest, res: NextApiResponse) {
       .status(400)
       .json({ message: "Error deleting comment", error: error });
   }
-  return res.status(204).json({ message: "Comment successfully deleted" });
+  return res.status(200).json({ message: "Comment successfully deleted" });
 }
 
 export default async function handler(

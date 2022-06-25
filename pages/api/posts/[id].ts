@@ -55,7 +55,7 @@ async function deletePostById(req: NextApiRequest, res: NextApiResponse) {
       .status(400)
       .json({ message: "Error deleting post", error: error });
   }
-  return res.status(204).json({ message: "Post successfully deleted" });
+  return res.status(200).json({ message: "Post successfully deleted" });
 }
 
 export default async function handler(
