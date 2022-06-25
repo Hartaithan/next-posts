@@ -16,12 +16,14 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
+import { useState } from "react";
 import { Dots, Edit, Trash } from "tabler-icons-react";
 import CommentInput from "../../components/CommentInput";
 import CommentsSection from "../../components/CommentsSection";
 import ImageFallback from "../../components/ImageFallback";
 import { fullDate } from "../../helpers/date";
 import MainLayout from "../../layouts/MainLayout";
+import { ICommentItem } from "../../models/CommentModel";
 import { IPostItem, IPostResponse } from "../../models/PostModel";
 import { supabase } from "../../utils/supabaseClient";
 
@@ -111,8 +113,10 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     title,
     description,
     content,
-    comments,
+    comments: resComments,
   } = post;
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [comments, setComments] = useState<ICommentItem[]>(resComments);
 
   const confirmDeleteModal = () =>
     modals.openConfirmModal({
@@ -125,6 +129,18 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
       onCancel: () => console.log("Cancel"),
       onConfirm: () => console.log("Confirmed"),
     });
+
+  const loadComments = async () => {
+    setLoading(true);
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comments/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        setComments(res.comments);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
     <MainLayout title={title}>
@@ -199,8 +215,10 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           </div>
         </Group>
       </Card>
-      {user && <CommentInput post_id={id} user={user} />}
-      <CommentsSection comments={comments} />
+      {user && (
+        <CommentInput post_id={id} user={user} loadComments={loadComments} />
+      )}
+      <CommentsSection comments={comments} isLoading={isLoading} />
     </MainLayout>
   );
 };

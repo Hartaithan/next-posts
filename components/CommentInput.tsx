@@ -14,10 +14,11 @@ import { showNotification } from "@mantine/notifications";
 interface ICommentInputProps {
   post_id: string | string[] | undefined;
   user: User | null;
+  loadComments: () => void;
 }
 
 const CommentInput: FC<ICommentInputProps> = (props) => {
-  const { post_id, user } = props;
+  const { post_id, user, loadComments } = props;
   const [isLoading, setLoading] = useState(false);
   const form = useForm({
     initialValues: {
@@ -41,6 +42,8 @@ const CommentInput: FC<ICommentInputProps> = (props) => {
           color: "green",
           message: res.message,
         });
+        form.setFieldValue("content", "");
+        loadComments();
       })
       .catch((error) => {
         showNotification({
