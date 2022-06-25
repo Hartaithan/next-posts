@@ -47,9 +47,9 @@ const CommentInput: FC<ICommentInputProps> = (props) => {
       })
       .catch((error) => {
         showNotification({
-          title: "Adding post failed",
+          title: "Error",
           color: "red",
-          message: error.response.message || "Error creating new comment",
+          message: error.response?.message || "Error creating new comment",
         });
       })
       .finally(() => {

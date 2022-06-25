@@ -10,12 +10,14 @@ import {
 } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import { NextLink } from "@mantine/next";
+import { showNotification } from "@mantine/notifications";
 import { User } from "@supabase/supabase-js";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { Dots, Edit, Trash } from "tabler-icons-react";
 import CommentInput from "../../components/CommentInput";
@@ -104,6 +106,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   props
 ) => {
   const { id, post, user } = props;
+  const router = useRouter();
   const modals = useModals();
   const { classes, cx } = useStyles();
   const {
@@ -126,9 +129,30 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
       ),
       labels: { confirm: "Confirm", cancel: "Cancel" },
       centered: true,
-      onCancel: () => console.log("Cancel"),
-      onConfirm: () => console.log("Confirmed"),
+      onConfirm: () => deletePost(),
     });
+
+  const deletePost = async () => {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        showNotification({
+          title: "Success",
+          color: "green",
+          message: res.message,
+        });
+        router.push("/posts");
+      })
+      .catch((error) => {
+        showNotification({
+          title: "Error",
+          color: "red",
+          message: error.response?.message || "Error deleting post",
+        });
+      });
+  };
 
   const loadComments = async () => {
     setLoading(true);

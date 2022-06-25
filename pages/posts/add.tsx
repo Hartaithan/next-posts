@@ -79,9 +79,9 @@ const PostAdd: NextPage<
       })
       .catch((error) => {
         showNotification({
-          title: "Adding post failed",
+          title: "Error",
           color: "red",
-          message: error.response.message || "Error during upload image",
+          message: error.response?.message || "Error during upload image",
         });
       });
   };
@@ -114,9 +114,9 @@ const PostAdd: NextPage<
       })
       .catch((error) => {
         showNotification({
-          title: "Upload failed",
+          title: "Error",
           color: "red",
-          message: error.response.message || "Error during upload image",
+          message: error.response?.message || "Error during upload image",
         });
       });
   };
