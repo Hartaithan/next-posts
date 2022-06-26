@@ -247,6 +247,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
         isLoading={isLoading}
         post_id={id}
         user={user}
+        loadComments={loadComments}
       />
     </MainLayout>
   );

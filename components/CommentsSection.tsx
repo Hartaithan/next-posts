@@ -9,6 +9,7 @@ interface ICommentsSectionProps {
   isLoading: boolean;
   post_id: string | string[] | undefined;
   user: User | null;
+  loadComments: () => void;
 }
 
 const useStyles = createStyles((theme) => ({
@@ -18,7 +19,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const CommentsSection: FC<ICommentsSectionProps> = (props) => {
-  const { comments, isLoading, post_id, user } = props;
+  const { comments, isLoading, post_id, user, loadComments } = props;
   const { classes } = useStyles();
   return (
     <Card shadow="sm" p="lg" mt={20} radius={20}>
@@ -36,6 +37,7 @@ const CommentsSection: FC<ICommentsSectionProps> = (props) => {
             comment={comment}
             post_id={post_id}
             user={user}
+            loadComments={loadComments}
           />
         ))}
     </Card>
