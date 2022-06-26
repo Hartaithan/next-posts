@@ -242,7 +242,12 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
       {user && (
         <CommentInput post_id={id} user={user} loadComments={loadComments} />
       )}
-      <CommentsSection comments={comments} isLoading={isLoading} />
+      <CommentsSection
+        comments={comments}
+        isLoading={isLoading}
+        post_id={id}
+        user={user}
+      />
     </MainLayout>
   );
 };

@@ -1,4 +1,5 @@
 import { Card, createStyles, LoadingOverlay, Text, Title } from "@mantine/core";
+import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 import { ICommentItem } from "../models/CommentModel";
 import CommentItem from "./CommentItem";
@@ -6,6 +7,8 @@ import CommentItem from "./CommentItem";
 interface ICommentsSectionProps {
   comments: ICommentItem[];
   isLoading: boolean;
+  post_id: string | string[] | undefined;
+  user: User | null;
 }
 
 const useStyles = createStyles((theme) => ({
@@ -15,7 +18,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const CommentsSection: FC<ICommentsSectionProps> = (props) => {
-  const { comments, isLoading } = props;
+  const { comments, isLoading, post_id, user } = props;
   const { classes } = useStyles();
   return (
     <Card shadow="sm" p="lg" mt={20} radius={20}>
@@ -28,7 +31,12 @@ const CommentsSection: FC<ICommentsSectionProps> = (props) => {
       )}
       {comments.length > 0 &&
         comments.map((comment) => (
-          <CommentItem key={comment.id} comment={comment} />
+          <CommentItem
+            key={comment.id}
+            comment={comment}
+            post_id={post_id}
+            user={user}
+          />
         ))}
     </Card>
   );

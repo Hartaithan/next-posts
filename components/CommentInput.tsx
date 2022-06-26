@@ -19,7 +19,7 @@ interface ICommentInputProps {
 
 const CommentInput: FC<ICommentInputProps> = (props) => {
   const { post_id, user, loadComments } = props;
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
   const form = useForm({
     initialValues: {
       post_id,
