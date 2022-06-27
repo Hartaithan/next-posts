@@ -10,6 +10,7 @@ import {
 import { useForm } from "@mantine/hooks";
 import { User } from "@supabase/supabase-js";
 import { showNotification } from "@mantine/notifications";
+import { checkResStatus } from "../helpers/response";
 
 interface ICommentInputProps {
   post_id: string | string[] | undefined;
@@ -35,7 +36,9 @@ const CommentInput: FC<ICommentInputProps> = (props) => {
       headers: new Headers({ "Content-Type": "application/json" }),
       body: JSON.stringify(values),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        return checkResStatus(res);
+      })
       .then((res) => {
         showNotification({
           title: "Success",
@@ -49,7 +52,7 @@ const CommentInput: FC<ICommentInputProps> = (props) => {
         showNotification({
           title: "Error",
           color: "red",
-          message: error.response?.message || "Error creating new comment",
+          message: error?.message || "Something went wrong!",
         });
       })
       .finally(() => {

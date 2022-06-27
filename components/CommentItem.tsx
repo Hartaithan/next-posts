@@ -16,6 +16,7 @@ import { useForm } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 import { User } from "@supabase/supabase-js";
 import { useModals } from "@mantine/modals";
+import { checkResStatus } from "../helpers/response";
 
 interface ICommentItemProps {
   comment: ICommentItem;
@@ -89,7 +90,9 @@ const CommentItem: FC<ICommentItemProps> = (props) => {
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comments/${comment.id}`, {
       method: "DELETE",
     })
-      .then((res) => res.json())
+      .then((res) => {
+        return checkResStatus(res);
+      })
       .then((res) => {
         showNotification({
           title: "Success",
@@ -102,7 +105,7 @@ const CommentItem: FC<ICommentItemProps> = (props) => {
         showNotification({
           title: "Error",
           color: "red",
-          message: error.response?.message || "Error deleting post",
+          message: error?.message || "Something went wrong!",
         });
       });
   };
@@ -114,7 +117,9 @@ const CommentItem: FC<ICommentItemProps> = (props) => {
       headers: new Headers({ "Content-Type": "application/json" }),
       body: JSON.stringify(values),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        return checkResStatus(res);
+      })
       .then((res) => {
         showNotification({
           title: "Success",
@@ -127,7 +132,7 @@ const CommentItem: FC<ICommentItemProps> = (props) => {
         showNotification({
           title: "Error",
           color: "red",
-          message: error.response?.message || "Error updating comment",
+          message: error?.message || "Something went wrong!",
         });
       })
       .finally(() => {

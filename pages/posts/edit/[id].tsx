@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import DropzoneChildren from "../../../components/DropzoneChildren";
 import Editor from "../../../components/Editor";
+import { checkResStatus } from "../../../helpers/response";
 import MainLayout from "../../../layouts/MainLayout";
 import {
   IDropzoneFile,
@@ -75,7 +76,9 @@ const EditPost: NextPage<
       headers: new Headers({ "Content-Type": "application/json" }),
       body: JSON.stringify(values),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        return checkResStatus(res);
+      })
       .then((res) => {
         showNotification({
           title: "Success",
@@ -88,7 +91,7 @@ const EditPost: NextPage<
         showNotification({
           title: "Error",
           color: "red",
-          message: error.response?.message || "Error during upload image",
+          message: error?.message || "Something went wrong!",
         });
       });
   };

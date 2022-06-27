@@ -24,6 +24,7 @@ import CommentInput from "../../components/CommentInput";
 import CommentsSection from "../../components/CommentsSection";
 import ImageFallback from "../../components/ImageFallback";
 import { fullDate } from "../../helpers/date";
+import { checkResStatus } from "../../helpers/response";
 import MainLayout from "../../layouts/MainLayout";
 import { ICommentItem } from "../../models/CommentModel";
 import { IPostItem, IPostResponse } from "../../models/PostModel";
@@ -136,7 +137,9 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`, {
       method: "DELETE",
     })
-      .then((res) => res.json())
+      .then((res) => {
+        return checkResStatus(res);
+      })
       .then((res) => {
         showNotification({
           title: "Success",
@@ -149,7 +152,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
         showNotification({
           title: "Error",
           color: "red",
-          message: error.response?.message || "Error deleting post",
+          message: error?.message || "Something went wrong!",
         });
       });
   };

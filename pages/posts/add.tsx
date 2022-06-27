@@ -21,6 +21,7 @@ import { showNotification } from "@mantine/notifications";
 import { useRouter } from "next/router";
 import { supabase } from "../../utils/supabaseClient";
 import { User } from "@supabase/supabase-js";
+import { checkResStatus } from "../../helpers/response";
 
 interface IPostAddPageProps {
   user: User | null;
@@ -68,7 +69,9 @@ const PostAdd: NextPage<
       headers: new Headers({ "Content-Type": "application/json" }),
       body: JSON.stringify(values),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        return checkResStatus(res);
+      })
       .then((res) => {
         showNotification({
           title: "Success",
@@ -81,7 +84,7 @@ const PostAdd: NextPage<
         showNotification({
           title: "Error",
           color: "red",
-          message: error.response?.message || "Error during upload image",
+          message: error?.message || "Something went wrong!",
         });
       });
   };
@@ -102,7 +105,9 @@ const PostAdd: NextPage<
       method: "POST",
       body: fd,
     })
-      .then((res) => res.json())
+      .then((res) => {
+        return checkResStatus(res);
+      })
       .then((res) => {
         form.setFieldValue("image_url", res.image_url);
         setPreview({ isLoading: false, url: res.image_url });
@@ -116,7 +121,7 @@ const PostAdd: NextPage<
         showNotification({
           title: "Error",
           color: "red",
-          message: error.response?.message || "Error during upload image",
+          message: error?.message || "Something went wrong!",
         });
       });
   };
