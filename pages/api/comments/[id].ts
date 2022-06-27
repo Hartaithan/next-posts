@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { validatePayload } from "../../../helpers/payload";
 import { supabase } from "../../../utils/supabaseClient";
 
 async function getCommentsByPostId(req: NextApiRequest, res: NextApiResponse) {
@@ -25,6 +26,12 @@ async function updateCommentById(req: NextApiRequest, res: NextApiResponse) {
   const payload = {
     content: body.content,
   };
+  const results = validatePayload(payload);
+  if (results.length > 0) {
+    return res
+      .status(400)
+      .json({ message: "Invalid payload", errors: results });
+  }
   const { data, error } = await supabase
     .from("comments")
     .update(payload)

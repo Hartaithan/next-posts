@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { validatePayload } from "../../../helpers/payload";
 import { supabase } from "../../../utils/supabaseClient";
 
 async function getAllPosts(req: NextApiRequest, res: NextApiResponse) {
@@ -26,6 +27,12 @@ async function addPost(req: NextApiRequest, res: NextApiResponse) {
     image_url: body.image_url,
     user: body.user,
   };
+  const results = validatePayload(payload);
+  if (results.length > 0) {
+    return res
+      .status(400)
+      .json({ message: "Invalid payload", errors: results });
+  }
   const { data, error } = await supabase
     .from("posts")
     .insert([payload])
