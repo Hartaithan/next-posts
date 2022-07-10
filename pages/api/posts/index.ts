@@ -9,6 +9,7 @@ async function getAllPosts(req: NextApiRequest, res: NextApiResponse) {
   const { data: posts, error: postsError } = await supabase
     .from("posts")
     .select("*, comments(*)")
+    .order("created_at", { ascending: false })
     .limit(Number(limit));
   if (postsError) {
     return res

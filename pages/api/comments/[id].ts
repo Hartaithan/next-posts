@@ -9,6 +9,7 @@ async function getCommentsByPostId(req: NextApiRequest, res: NextApiResponse) {
   const { data, error } = await supabase
     .from("comments")
     .select("*")
+    .order("created_at", { ascending: false })
     .eq("post_id", id);
   if (error) {
     return res
