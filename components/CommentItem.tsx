@@ -12,7 +12,7 @@ import { FC, useState } from "react";
 import { CalendarTime, Edit, TrashX } from "tabler-icons-react";
 import { ICommentItem } from "../models/CommentModel";
 import { fullDate, onlyDate } from "../helpers/date";
-import { useForm } from "@mantine/hooks";
+import { useForm, useMediaQuery } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 import { User } from "@supabase/supabase-js";
 import { useModals } from "@mantine/modals";
@@ -58,12 +58,25 @@ const useStyles = createStyles((theme) => ({
     flexDirection: "row",
     cursor: "pointer",
   },
+  commentRow: {
+    flexDirection: "row",
+    "@media (max-width: 576px)": {
+      flexDirection: "column",
+    },
+  },
+  commentGroup: {
+    width: "auto",
+    "@media (max-width: 576px)": {
+      width: "100%",
+    },
+  },
 }));
 
 const CommentItem: FC<ICommentItemProps> = (props) => {
   const { comment, post_id, user, loadComments } = props;
   const { classes } = useStyles();
   const modals = useModals();
+  const mobile = useMediaQuery("(max-width: 576px)");
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isEdit, setEdit] = useState<boolean>(false);
 
@@ -142,46 +155,60 @@ const CommentItem: FC<ICommentItemProps> = (props) => {
 
   return (
     <div className={classes.wrapper}>
-      <Stack className={classes.row} align="center" spacing="md">
-        <Text weight={500}>{comment.user}</Text>
-        <Tooltip
-          className={classes.tooltip}
-          transition="pop"
-          transitionDuration={300}
-          transitionTimingFunction="ease"
-          label={fullDate(comment.created_at)}
+      <Stack
+        className={classes.commentRow}
+        align={mobile ? "flex-start" : "center"}
+        spacing={mobile ? 2 : "md"}
+      >
+        <Group
+          className={classes.commentGroup}
+          position={mobile ? "apart" : "left"}
         >
-          <CalendarTime size={16} strokeWidth={2} />
-          <Text color="dimmed" size="sm" ml={4}>
-            {onlyDate(comment.created_at)}
-          </Text>
-        </Tooltip>
-        {user?.email === comment.user && (
-          <>
-            <Stack
-              className={classes.edit}
-              align="center"
-              spacing={2}
-              onClick={() => setEdit(!isEdit)}
-            >
-              <Edit size={16} strokeWidth={2} />
-              <Text color="dimmed" size="sm" ml={4}>
-                Edit
-              </Text>
-            </Stack>
-            <Stack
-              className={classes.edit}
-              align="center"
-              spacing={2}
-              onClick={() => confirmDeleteModal()}
-            >
-              <TrashX size={16} strokeWidth={2} />
-              <Text color="dimmed" size="sm" ml={4}>
-                Delete
-              </Text>
-            </Stack>
-          </>
-        )}
+          <Text weight={500}>{comment.user}</Text>
+          <Tooltip
+            className={classes.tooltip}
+            transition="pop"
+            transitionDuration={300}
+            transitionTimingFunction="ease"
+            label={fullDate(comment.created_at)}
+          >
+            <CalendarTime size={16} strokeWidth={2} />
+            <Text color="dimmed" size="sm" ml={4}>
+              {onlyDate(comment.created_at)}
+            </Text>
+          </Tooltip>
+        </Group>
+        <Group
+          className={classes.commentGroup}
+          position={mobile ? "right" : "left"}
+        >
+          {user?.email === comment.user && (
+            <>
+              <Stack
+                className={classes.edit}
+                align="center"
+                spacing={2}
+                onClick={() => setEdit(!isEdit)}
+              >
+                <Edit size={16} strokeWidth={2} />
+                <Text color="dimmed" size="sm" ml={4}>
+                  Edit
+                </Text>
+              </Stack>
+              <Stack
+                className={classes.edit}
+                align="center"
+                spacing={2}
+                onClick={() => confirmDeleteModal()}
+              >
+                <TrashX size={16} strokeWidth={2} />
+                <Text color="dimmed" size="sm" ml={4}>
+                  Delete
+                </Text>
+              </Stack>
+            </>
+          )}
+        </Group>
       </Stack>
       {isEdit ? (
         <form onSubmit={form.onSubmit(handleSubmit)}>
