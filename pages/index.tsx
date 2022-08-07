@@ -1,4 +1,5 @@
 import { Grid, SimpleGrid, useMantineTheme } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import type {
   GetServerSideProps,
   InferGetServerSidePropsType,
@@ -29,6 +30,7 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 ) => {
   const { posts } = props;
   const theme = useMantineTheme();
+  const mobile = useMediaQuery("(max-width: 576px)");
   const SECONDARY_COL_HEIGHT = PRIMARY_COL_HEIGHT / 2 - theme.spacing.md / 2;
   return (
     <MainLayout title={"Home"}>
@@ -57,9 +59,7 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           <PostGridItem main height={PRIMARY_COL_HEIGHT} post={posts[0]} />
           <Grid gutter="md">
             {posts.map((item: IPostItem, index: number) => {
-              if (index === 0) {
-                return null;
-              }
+              if (index === 0) return null;
               return (
                 <Grid.Col key={item.id}>
                   <PostGridItem height={SECONDARY_COL_HEIGHT} post={item} />
@@ -78,11 +78,11 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           <PostGridItem main height={PRIMARY_COL_HEIGHT} post={posts[0]} />
           <Grid gutter="md">
             {posts.map((item: IPostItem, index: number) => {
-              if (index === 0) {
-                return null;
-              }
+              const firstPost = index === 0;
+              const secondPost = index === 1;
+              if (firstPost) return null;
               return (
-                <Grid.Col key={item.id} span={index === 1 ? 12 : 6}>
+                <Grid.Col key={item.id} span={mobile || secondPost ? 12 : 6}>
                   <PostGridItem height={SECONDARY_COL_HEIGHT} post={item} />
                 </Grid.Col>
               );
