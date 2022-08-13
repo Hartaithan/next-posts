@@ -1,7 +1,7 @@
 import { Text, Group, createStyles, Paper, Title } from "@mantine/core";
 import Link from "next/link";
 import { FC } from "react";
-import { CalendarTime, UserCircle } from "tabler-icons-react";
+import { CalendarTime, Message, UserCircle } from "tabler-icons-react";
 import { onlyDate } from "../helpers/date";
 import { IPostItemProps } from "../models/PostModel";
 import ImageFallback from "./ImageFallback";
@@ -85,11 +85,17 @@ const useStyles = createStyles((theme, { height }: IPostItemProps) => {
       position: "relative",
       zIndex: 2,
     },
+    row: {
+      display: "flex",
+      flexWrap: "nowrap",
+      gap: "12px",
+    },
   };
 });
 
 const PostGridItem: FC<IPostItemProps> = (props) => {
-  const { id, created_at, title, description, user, image_url } = props.post;
+  const { id, created_at, title, description, user, image_url, comments } =
+    props.post;
   const { classes } = useStyles(props);
 
   if (props.main) {
@@ -106,17 +112,27 @@ const PostGridItem: FC<IPostItemProps> = (props) => {
             </Text>
           </div>
           <div className={classes.wrapper}>
-            <Group position="apart" className={classes.footer}>
+            <Group position="left" className={classes.footer}>
               <UserCircle size={16} strokeWidth={2} />
               <Text size="sm" inline>
                 {user ? user : "Unknown"}
               </Text>
             </Group>
-            <Group position="apart" className={classes.footer}>
-              <CalendarTime size={16} strokeWidth={2} />
-              <Text size="sm" inline>
-                {onlyDate(created_at)}
-              </Text>
+            <Group position="left" className={classes.footer}>
+              <div className={classes.row}>
+                <CalendarTime size={16} strokeWidth={2} />
+                <Text size="sm" inline>
+                  {onlyDate(created_at)}
+                </Text>
+              </div>
+              {comments.length > 0 && (
+                <div className={classes.row}>
+                  <Message size={16} strokeWidth={2} />
+                  <Text size="sm" inline>
+                    {comments.length} comments
+                  </Text>
+                </div>
+              )}
             </Group>
           </div>
           <ImageFallback

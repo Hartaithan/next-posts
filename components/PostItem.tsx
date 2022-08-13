@@ -46,6 +46,11 @@ const useStyles = createStyles((theme) => ({
     marginTop: theme.spacing.md,
     gap: "12px",
   },
+  row: {
+    display: "flex",
+    flexWrap: "nowrap",
+    gap: "12px",
+  },
 }));
 
 const PostItem: FC<IPostItemProps> = (props) => {
@@ -77,17 +82,19 @@ const PostItem: FC<IPostItemProps> = (props) => {
           </Text>
         </Group>
         <Group position="apart" className={classes.footer}>
-          <CalendarTime size={16} strokeWidth={2} />
-          <Text size="sm" inline>
-            {onlyDate(created_at)}
-          </Text>
+          <div className={classes.row}>
+            <CalendarTime size={16} strokeWidth={2} />
+            <Text size="sm" inline>
+              {onlyDate(created_at)}
+            </Text>
+          </div>
           {comments.length > 0 && (
-            <>
+            <div className={classes.row}>
               <Message size={16} strokeWidth={2} />
               <Text size="sm" inline>
                 {comments.length} comments
               </Text>
-            </>
+            </div>
           )}
         </Group>
       </Card>
