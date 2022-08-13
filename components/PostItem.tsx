@@ -1,7 +1,7 @@
 import { Card, Text, Group, createStyles } from "@mantine/core";
 import Link from "next/link";
 import { FC } from "react";
-import { CalendarTime, UserCircle } from "tabler-icons-react";
+import { CalendarTime, Message, UserCircle } from "tabler-icons-react";
 import { onlyDate } from "../helpers/date";
 import { IPostItemProps } from "../models/PostModel";
 import ImageFallback from "./ImageFallback";
@@ -13,6 +13,7 @@ const useStyles = createStyles((theme) => ({
       theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
     cursor: "pointer",
     transition: "transform 0.3s ease-in",
+    height: "100%",
     "&:hover": {
       transform: "scale(1.02)",
     },
@@ -48,7 +49,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const PostItem: FC<IPostItemProps> = (props) => {
-  const { id, created_at, image_url, title, description, user } = props.post;
+  const { id, created_at, image_url, title, description, user, comments } =
+    props.post;
   const { classes } = useStyles();
 
   return (
@@ -63,15 +65,15 @@ const PostItem: FC<IPostItemProps> = (props) => {
           />
         </Card.Section>
         <Text className={classes.title} weight={500} component="a">
-          {title ? title : "Title not found"}
+          {title || "Title not found"}
         </Text>
         <Text size="sm" color="dimmed" lineClamp={4}>
-          {description ? description : "Description not found"}
+          {description || "Description not found"}
         </Text>
         <Group position="apart" className={classes.footer}>
           <UserCircle size={16} strokeWidth={2} />
           <Text size="sm" inline>
-            {user ? user : "Unknown"}
+            {user || "Unknown"}
           </Text>
         </Group>
         <Group position="apart" className={classes.footer}>
@@ -79,6 +81,14 @@ const PostItem: FC<IPostItemProps> = (props) => {
           <Text size="sm" inline>
             {onlyDate(created_at)}
           </Text>
+          {comments.length > 0 && (
+            <>
+              <Message size={16} strokeWidth={2} />
+              <Text size="sm" inline>
+                {comments.length} comments
+              </Text>
+            </>
+          )}
         </Group>
       </Card>
     </Link>
