@@ -8,3 +8,9 @@ export const navigation: IHeaderLink[] = [
   { name: "Posts", path: "/posts" },
   { name: "Add post", path: "/posts/add" },
 ];
+
+export const mobileNavigation: IHeaderLink[] = [
+  { name: "Home", path: "/" },
+  { name: "Add post", path: "/posts/add" },
+  { name: "Posts", path: "/posts" },
+];

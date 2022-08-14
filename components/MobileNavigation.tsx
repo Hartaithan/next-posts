@@ -1,7 +1,7 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { Container, createStyles } from "@mantine/core";
 import Link from "next/link";
-import { navigation } from "../models/HeaderModel";
+import { mobileNavigation, navigation } from "../models/HeaderModel";
 import { useRouter } from "next/router";
 
 const NAVIGATION_HEIGHT = 60;
@@ -58,17 +58,20 @@ const MobileNavigation: FC = () => {
   const router = useRouter();
   const { classes, cx } = useStyles();
 
-  const items = navigation.map((link) => (
-    <Link key={link.name} href={link.path}>
-      <a
-        className={cx(classes.link, {
-          [classes.linkActive]: router.pathname === link.path,
-        })}
-      >
-        {link.name}
-      </a>
-    </Link>
-  ));
+  const items = useMemo(
+    () =>
+      navigation.map((link) => {
+        const active = router.pathname === link.path;
+        return (
+          <Link key={link.name} href={link.path}>
+            <a className={cx(classes.link, active && classes.linkActive)}>
+              {link.name}
+            </a>
+          </Link>
+        );
+      }),
+    [] // eslint-disable-line
+  );
 
   return <Container className={classes.navigation}>{items}</Container>;
 };

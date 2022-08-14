@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { useRouter } from "next/router";
 import { navigation } from "../models/HeaderModel";
 import {
@@ -104,20 +104,25 @@ const Header: FC = () => {
   const [opened, toggleOpened] = useBooleanToggle(false);
   const { classes, cx } = useStyles();
 
-  const items = navigation.map((link) => (
-    <Link key={link.name} href={link.path}>
-      <a
-        className={cx(classes.link, {
-          [classes.linkActive]: router.pathname === link.path,
-        })}
-        onClick={() => {
-          toggleOpened(false);
-        }}
-      >
-        {link.name}
-      </a>
-    </Link>
-  ));
+  const items = useMemo(
+    () =>
+      navigation.map((link) => {
+        const active = router.pathname === link.path;
+        return (
+          <Link key={link.name} href={link.path}>
+            <a
+              className={cx(classes.link, active && classes.linkActive)}
+              onClick={() => {
+                toggleOpened(false);
+              }}
+            >
+              {link.name}
+            </a>
+          </Link>
+        );
+      }),
+    [] // eslint-disable-line
+  );
 
   const handleLogout = () => {
     logout()
