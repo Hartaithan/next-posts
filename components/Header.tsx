@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useRouter } from "next/router";
-import { IHeaderLink } from "../models/HeaderModel";
+import { navigation } from "../models/HeaderModel";
 import {
   createStyles,
   Header as MantineHeader,
@@ -12,17 +12,11 @@ import {
   Button,
   Skeleton,
 } from "@mantine/core";
-import { useBooleanToggle, useMediaQuery } from "@mantine/hooks";
+import { useBooleanToggle } from "@mantine/hooks";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import { useAuth } from "../context/auth";
 import { showNotification } from "@mantine/notifications";
-
-const navigation: IHeaderLink[] = [
-  { name: "Home", path: "/" },
-  { name: "Posts", path: "/posts" },
-  { name: "Add post", path: "/posts/add" },
-];
 
 const HEADER_HEIGHT = 60;
 
