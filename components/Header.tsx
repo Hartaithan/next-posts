@@ -12,7 +12,7 @@ import {
   Button,
   Skeleton,
 } from "@mantine/core";
-import { useBooleanToggle } from "@mantine/hooks";
+import { useBooleanToggle, useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import { useAuth } from "../context/auth";
