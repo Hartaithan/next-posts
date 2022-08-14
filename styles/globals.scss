@@ -21,6 +21,7 @@ body:not(.mantine-Modal-root) {
 #__next {
   display: flex;
   flex-direction: column;
+  overflow: auto;
 }
 
 ::-webkit-scrollbar {
@@ -35,4 +36,10 @@ body:not(.mantine-Modal-root) {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #2c2e33;
+}
+
+@media (max-width: 576px) {
+  ::-webkit-scrollbar {
+    width: 0;
+  }
 }

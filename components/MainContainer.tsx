@@ -7,6 +7,9 @@ const useStyles = createStyles(() => ({
     flexGrow: 1,
     width: "100%",
     scrollbarGutter: "stable both-edges",
+    "@media (max-width: 576px)": {
+      marginBottom: 75,
+    },
   },
 }));
 
