@@ -27,6 +27,7 @@ async function updateVoteById(req: NextApiRequest, res: NextApiResponse) {
   const payload = {
     vote: body.vote,
     post_id: body.post_id,
+    user: body.user,
   };
   const results = validatePayload(payload);
   if (results.length > 0) {

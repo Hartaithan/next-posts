@@ -7,12 +7,21 @@ async function addVote(req: NextApiRequest, res: NextApiResponse) {
   const payload = {
     vote: body.vote,
     post_id: body.post_id,
+    user: body.user,
   };
   const results = validatePayload(payload);
   if (results.length > 0) {
     return res
       .status(400)
       .json({ message: "Invalid payload", errors: results });
+  }
+  const { data: vote } = await supabase
+    .from("votes")
+    .select("*")
+    .match({ post_id: body.post_id, user: body.user })
+    .single();
+  if (vote) {
+    return res.status(400).json({ message: "You already voted on this post" });
   }
   const { data, error } = await supabase
     .from("votes")
