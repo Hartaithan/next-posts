@@ -29,25 +29,13 @@ async function addVote(req: NextApiRequest, res: NextApiResponse) {
       .status(400)
       .json({ message: "Error creating new vote", error: error });
   }
-  const { data: postVotes, error: postVotesError } = await supabase
-    .from("posts")
-    .select("votes")
-    .match({ id: body.post_id })
-    .single();
+  const { error: postVotesError } = await supabase.rpc("increment", {
+    post_id: body.post_id,
+  });
   if (postVotesError) {
     return res.status(400).json({
-      message: "Error fetching votes count by post_id",
-      error: postVotesError,
-    });
-  }
-  const { error: updatePostError } = await supabase
-    .from("posts")
-    .update({ votes: postVotes.votes + 1 })
-    .eq("id", body.post_id);
-  if (updatePostError) {
-    return res.status(400).json({
       message: "Error updating votes count in post",
-      error: updatePostError,
+      error: postVotesError,
     });
   }
   return res
