@@ -23,7 +23,10 @@ async function addVote(req: NextApiRequest, res: NextApiResponse) {
   if (vote) {
     return res.status(400).json({ message: "You already voted on this post" });
   }
-  const { data, error } = await supabase.from("votes").insert([payload]);
+  const { data, error } = await supabase
+    .from("votes")
+    .insert([payload])
+    .single();
   if (error) {
     return res
       .status(400)

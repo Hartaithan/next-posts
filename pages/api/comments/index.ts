@@ -15,7 +15,10 @@ async function addComment(req: NextApiRequest, res: NextApiResponse) {
       .status(400)
       .json({ message: "Invalid payload", errors: results });
   }
-  const { data, error } = await supabase.from("comments").insert([payload]);
+  const { data, error } = await supabase
+    .from("comments")
+    .insert([payload])
+    .single();
   if (error) {
     return res
       .status(400)
