@@ -30,6 +30,7 @@ async function addVote(req: NextApiRequest, res: NextApiResponse) {
       .json({ message: "Error creating new vote", error: error });
   }
   const { error: postVotesError } = await supabase.rpc("increment", {
+    x: 1,
     post_id: body.post_id,
   });
   if (postVotesError) {
