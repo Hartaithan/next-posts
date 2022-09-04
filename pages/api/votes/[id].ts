@@ -53,12 +53,30 @@ async function updateVoteById(req: NextApiRequest, res: NextApiResponse) {
 async function deleteVoteById(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { id },
+    body,
   } = req;
-  const { error } = await supabase.from("votes").delete().eq("id", id);
+  const payload = {
+    post_id: body.post_id,
+    user: body.user,
+  };
+  const { data, error } = await supabase
+    .from("votes")
+    .delete()
+    .match({ id: id, post_id: payload.post_id, user: payload.user })
+    .single();
   if (error) {
     return res
       .status(400)
       .json({ message: "Error deleting vote", error: error });
+  }
+  const { error: postVotesError } = await supabase.rpc("decrement", {
+    post_id: data.post_id,
+  });
+  if (postVotesError) {
+    return res.status(400).json({
+      message: "Error updating votes count in post",
+      error: postVotesError,
+    });
   }
   return res.status(200).json({ message: "Vote successfully deleted" });
 }
