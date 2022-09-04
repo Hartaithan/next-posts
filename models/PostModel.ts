@@ -10,6 +10,7 @@ export interface IPostItem {
   content: string;
   user: string;
   comments: ICommentItem[];
+  votes: number;
 }
 
 export interface IPostItemProps {
