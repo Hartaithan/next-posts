@@ -34,10 +34,7 @@ async function addPost(req: NextApiRequest, res: NextApiResponse) {
       .status(400)
       .json({ message: "Invalid payload", errors: results });
   }
-  const { data, error } = await supabase
-    .from("posts")
-    .insert([payload])
-    .single();
+  const { data, error } = await supabase.from("posts").insert([payload]);
   if (error) {
     return res
       .status(400)
