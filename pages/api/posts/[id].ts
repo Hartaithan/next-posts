@@ -4,7 +4,7 @@ import { supabase } from "../../../utils/supabaseClient";
 
 async function getPostById(req: NextApiRequest, res: NextApiResponse) {
   const {
-    query: { id },
+    query: { id, user },
   } = req;
   const { data, error } = await supabase
     .from("posts")
@@ -16,7 +16,18 @@ async function getPostById(req: NextApiRequest, res: NextApiResponse) {
       .status(400)
       .json({ message: "Error fetching posts", error: error });
   }
-  return res.status(200).json({ post: data });
+  if (user !== undefined) {
+    const { data: vote, error: voteError } = await supabase
+      .from("votes")
+      .select("*")
+      .match({ post_id: id, user: user })
+      .single();
+    if (voteError) {
+      return res.status(200).json({ post: data, vote: null });
+    }
+    return res.status(200).json({ post: data, vote: vote });
+  }
+  return res.status(200).json({ post: data, vote: null });
 }
 
 async function updatePostById(req: NextApiRequest, res: NextApiResponse) {

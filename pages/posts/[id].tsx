@@ -28,12 +28,14 @@ import { checkResStatus } from "../../helpers/response";
 import MainLayout from "../../layouts/MainLayout";
 import { ICommentItem } from "../../models/CommentModel";
 import { IPostItem, IPostResponse } from "../../models/PostModel";
+import { IVoteItem } from "../../models/VoteModel";
 import { supabase } from "../../utils/supabaseClient";
 
 interface IPostPageProps {
   id: string | string[] | undefined;
   post: IPostItem;
   user: User | null;
+  vote: IVoteItem | null;
 }
 
 export const getServerSideProps: GetServerSideProps<IPostPageProps> = async (
@@ -41,10 +43,13 @@ export const getServerSideProps: GetServerSideProps<IPostPageProps> = async (
 ) => {
   const id = context.params?.id;
   const { user } = await supabase.auth.api.getUserByCookie(context.req);
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`);
-  const { post }: IPostResponse = await res.json();
+  const userQuery = user?.email ? `?user=${user.email}` : "";
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/posts/${id}${userQuery}`
+  );
+  const { post, vote }: IPostResponse = await res.json();
   return {
-    props: { id, post, user: user ? user : null },
+    props: { id, post, user: user ? user : null, vote },
   };
 };
 

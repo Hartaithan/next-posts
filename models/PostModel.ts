@@ -1,4 +1,5 @@
 import { ICommentItem } from "./CommentModel";
+import { IVoteItem } from "./VoteModel";
 
 export interface IPostItem {
   id: number;
@@ -25,6 +26,7 @@ export interface IPostsResponse {
 
 export interface IPostResponse {
   post: IPostItem;
+  vote: IVoteItem | null;
 }
 
 export interface IPostPayload {
