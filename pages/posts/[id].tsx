@@ -23,6 +23,7 @@ import { Dots, Edit, Trash } from "tabler-icons-react";
 import CommentInput from "../../components/CommentInput";
 import CommentsSection from "../../components/CommentsSection";
 import ImageFallback from "../../components/ImageFallback";
+import Vote from "../../components/Vote";
 import { fullDate } from "../../helpers/date";
 import { checkResStatus } from "../../helpers/response";
 import MainLayout from "../../layouts/MainLayout";
@@ -110,11 +111,12 @@ const useStyles = createStyles((theme) => ({
 const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   props
 ) => {
-  const { id, post, user } = props;
+  const { id, post, user, vote } = props;
   const router = useRouter();
   const modals = useModals();
   const { classes, cx } = useStyles();
   const {
+    id: post_id,
     created_at,
     updated_at,
     image_url,
@@ -122,6 +124,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     description,
     content,
     comments: resComments,
+    votes,
   } = post;
   const [isLoading, setLoading] = useState<boolean>(false);
   const [comments, setComments] = useState<ICommentItem[]>(resComments);
@@ -213,6 +216,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                 </Menu.Item>
               </Menu>
             )}
+            <Vote post_id={post_id} count={votes} vote={vote} />
           </Group>
         </Card.Section>
         <Group className={classes.post}>
