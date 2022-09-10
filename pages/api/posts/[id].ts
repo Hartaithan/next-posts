@@ -4,8 +4,9 @@ import { supabase } from "../../../utils/supabaseClient";
 
 async function getPostById(req: NextApiRequest, res: NextApiResponse) {
   const {
-    query: { id, user },
+    query: { id },
   } = req;
+  const { user } = await supabase.auth.api.getUserByCookie(req);
   const { data, error } = await supabase
     .from("posts")
     .select("*, comments(*)")
@@ -16,11 +17,11 @@ async function getPostById(req: NextApiRequest, res: NextApiResponse) {
       .status(400)
       .json({ message: "Error fetching posts", error: error });
   }
-  if (user !== undefined) {
+  if (user && user.email !== undefined) {
     const { data: vote, error: voteError } = await supabase
       .from("votes")
       .select("*")
-      .match({ post_id: id, user: user })
+      .match({ post_id: id, user: user.email })
       .single();
     if (voteError) {
       return res.status(200).json({ post: data, vote: null });

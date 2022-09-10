@@ -43,10 +43,9 @@ export const getServerSideProps: GetServerSideProps<IPostPageProps> = async (
 ) => {
   const id = context.params?.id;
   const { user } = await supabase.auth.api.getUserByCookie(context.req);
-  const userQuery = user?.email ? `?user=${user.email}` : "";
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/posts/${id}${userQuery}`
-  );
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`, {
+    headers: context.req.headers as HeadersInit,
+  });
   const { post, vote }: IPostResponse = await res.json();
   return {
     props: { id, post, user: user ? user : null, vote },
