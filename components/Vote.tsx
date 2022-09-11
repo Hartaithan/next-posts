@@ -27,19 +27,62 @@ const useStyles = createStyles((theme) => ({
   count: {
     marginTop: 4,
     marginBottom: 4,
+    fontSize: 18,
+  },
+  icon: {
+    cursor: "pointer",
+    fill: "white",
+    stroke: "white",
+    transition: "all 0.2s ease-in-out",
+  },
+  upvote: {
+    "&:hover": {
+      fill: theme.colors.lime[9],
+      stroke: theme.colors.lime[9],
+      scale: "1.2",
+    },
+  },
+  upvoteActive: {
+    fill: theme.colors.lime[9],
+    stroke: theme.colors.lime[9],
+  },
+  downvote: {
+    "&:hover": {
+      fill: theme.colors.orange[7],
+      stroke: theme.colors.orange[7],
+      scale: "1.2",
+    },
+  },
+  downvoteActive: {
+    fill: theme.colors.orange[7],
+    stroke: theme.colors.orange[7],
   },
 }));
 
 const Vote: FC<IVoteProps> = (props) => {
-  const { post_id, count } = props;
-  const { classes } = useStyles();
+  const { post_id, count, vote } = props;
+  const { classes, cx } = useStyles();
   return (
     <div className={classes.container}>
-      <CaretUp fill="white" />
+      <CaretUp
+        className={cx(
+          classes.icon,
+          classes.upvote,
+          vote?.vote === "up" && classes.upvoteActive
+        )}
+        size={26}
+      />
       <Text weight={600} className={classes.count}>
         {count}
       </Text>
-      <CaretDown fill="white" />
+      <CaretDown
+        className={cx(
+          classes.icon,
+          classes.downvote,
+          vote?.vote === "down" && classes.upvoteActive
+        )}
+        size={26}
+      />
     </div>
   );
 };
