@@ -157,7 +157,39 @@ const Vote: FC<IVoteProps> = (props) => {
 
   const handleUpdateVote = async () => {};
 
-  const handleDeleteVote = async () => {};
+  const handleDeleteVote = async (action: Vote) => {
+    if (!user || !vote.item) {
+      return;
+    }
+    const payload = {
+      post_id,
+      user: user.email,
+    };
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/votes/${vote.item.id}`, {
+      method: "DELETE",
+      headers: new Headers({ "Content-Type": "application/json" }),
+      body: JSON.stringify(payload),
+    })
+      .then((res) => {
+        return checkResStatus(res);
+      })
+      .then((res) => {
+        const updatedCount = action === "up" ? vote.count - 1 : vote.count + 1;
+        setVote({ ...vote, item: null, count: updatedCount });
+        showNotification({
+          title: "Success",
+          color: "green",
+          message: res.message,
+        });
+      })
+      .catch((error) => {
+        showNotification({
+          title: "Error",
+          color: "red",
+          message: error?.message || "Something went wrong!",
+        });
+      });
+  };
 
   const handleVote = async (action: Vote) => {
     if (!user) {
@@ -165,17 +197,17 @@ const Vote: FC<IVoteProps> = (props) => {
       return;
     }
     switch (true) {
-      case vote.item! && action === "up":
+      case !vote.item && action === "up":
         handleUpvote();
         break;
-      case vote.item! && action === "down":
+      case !vote.item && action === "down":
         handleDownvote();
         break;
       case vote.item && vote.item.value === "up" && action === "up":
-        handleDeleteVote();
+        handleDeleteVote("up");
         break;
       case vote.item && vote.item.value === "down" && action === "down":
-        handleDeleteVote();
+        handleDeleteVote("down");
         break;
       case vote.item && vote.item.value === "down" && action === "up":
         handleUpdateVote();

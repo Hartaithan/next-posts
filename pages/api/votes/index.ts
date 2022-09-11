@@ -5,7 +5,7 @@ import { supabase } from "../../../utils/supabaseClient";
 async function addVote(req: NextApiRequest, res: NextApiResponse) {
   const { body } = req;
   const payload = {
-    vote: body.vote,
+    value: body.vote,
     post_id: body.post_id,
     user: body.user,
   };
