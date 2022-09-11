@@ -111,7 +111,39 @@ const Vote: FC<IVoteProps> = (props) => {
       });
   };
 
-  const handleDownvote = async () => {};
+  const handleDownvote = async () => {
+    if (!user) {
+      return;
+    }
+    const payload = {
+      vote: "down",
+      post_id,
+      user: user.email,
+    };
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/votes`, {
+      method: "POST",
+      headers: new Headers({ "Content-Type": "application/json" }),
+      body: JSON.stringify(payload),
+    })
+      .then((res) => {
+        return checkResStatus(res);
+      })
+      .then((res) => {
+        setVote({ ...vote, item: res.vote, count: vote.count - 1 });
+        showNotification({
+          title: "Success",
+          color: "green",
+          message: res.message,
+        });
+      })
+      .catch((error) => {
+        showNotification({
+          title: "Error",
+          color: "red",
+          message: error?.message || "Something went wrong!",
+        });
+      });
+  };
 
   const handleUpdateVote = async () => {};
 
