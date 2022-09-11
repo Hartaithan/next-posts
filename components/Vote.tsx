@@ -4,7 +4,7 @@ import { User } from "@supabase/supabase-js";
 import { FC, useState } from "react";
 import { CaretDown, CaretUp } from "tabler-icons-react";
 import { checkResStatus } from "../helpers/response";
-import { IVoteItem } from "../models/VoteModel";
+import { IVoteItem, Vote } from "../models/VoteModel";
 
 interface IVoteProps {
   post_id: number;
@@ -77,6 +77,16 @@ const Vote: FC<IVoteProps> = (props) => {
   const { classes, cx } = useStyles();
   const [vote, setVote] = useState<IVoteState>({ item: voteRes, count });
 
+  const unAuthError = () => {
+    if (!user) {
+      showNotification({
+        title: "Error",
+        color: "red",
+        message: "You must be logged in to place votes on the post.",
+      });
+    }
+  };
+
   const handleUpvote = async () => {
     if (!user) {
       return;
@@ -147,15 +157,46 @@ const Vote: FC<IVoteProps> = (props) => {
 
   const handleUpdateVote = async () => {};
 
+  const handleDeleteVote = async () => {};
+
+  const handleVote = async (action: Vote) => {
+    if (!user) {
+      unAuthError();
+      return;
+    }
+    switch (true) {
+      case vote.item! && action === "up":
+        handleUpvote();
+        break;
+      case vote.item! && action === "down":
+        handleDownvote();
+        break;
+      case vote.item && vote.item.value === "up" && action === "up":
+        handleDeleteVote();
+        break;
+      case vote.item && vote.item.value === "down" && action === "down":
+        handleDeleteVote();
+        break;
+      case vote.item && vote.item.value === "down" && action === "up":
+        handleUpdateVote();
+        break;
+      case vote.item && vote.item.value === "up" && action === "down":
+        handleUpdateVote();
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className={classes.container}>
       <CaretUp
         className={cx(
           classes.icon,
           classes.upvote,
-          vote.item && vote.item.vote === "up" && classes.upvoteActive
+          vote.item && vote.item.value === "up" && classes.upvoteActive
         )}
-        onClick={() => handleUpvote()}
+        onClick={() => handleVote("up")}
         size={26}
       />
       <Text weight={600} className={classes.count}>
@@ -165,9 +206,9 @@ const Vote: FC<IVoteProps> = (props) => {
         className={cx(
           classes.icon,
           classes.downvote,
-          vote.item && vote.item.vote === "down" && classes.downvoteActive
+          vote.item && vote.item.value === "down" && classes.downvoteActive
         )}
-        onClick={() => handleDownvote()}
+        onClick={() => handleVote("down")}
         size={26}
       />
     </div>

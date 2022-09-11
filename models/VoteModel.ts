@@ -5,6 +5,6 @@ export interface IVoteItem {
   created_at: string;
   updated_at: string | null;
   post_id: number;
-  vote: Vote;
+  value: Vote;
   user: string;
 }
