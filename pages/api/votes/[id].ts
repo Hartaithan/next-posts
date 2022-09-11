@@ -58,7 +58,7 @@ async function updateVoteById(req: NextApiRequest, res: NextApiResponse) {
   }
   return res
     .status(201)
-    .json({ message: "Vote successfully updated", post: data });
+    .json({ message: "Vote successfully updated", vote: data });
 }
 
 async function deleteVoteById(req: NextApiRequest, res: NextApiResponse) {
