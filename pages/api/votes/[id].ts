@@ -25,7 +25,7 @@ async function updateVoteById(req: NextApiRequest, res: NextApiResponse) {
     body,
   } = req;
   const payload = {
-    vote: body.vote,
+    value: body.vote,
     post_id: body.post_id,
     user: body.user,
   };
@@ -80,7 +80,8 @@ async function deleteVoteById(req: NextApiRequest, res: NextApiResponse) {
       .status(400)
       .json({ message: "Error deleting vote", error: error });
   }
-  const { error: postVotesError } = await supabase.rpc("decrement", {
+  const update = data.value === "up" ? "decrement" : "increment";
+  const { error: postVotesError } = await supabase.rpc(update, {
     x: 1,
     post_id: data.post_id,
   });
