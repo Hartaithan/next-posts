@@ -9,55 +9,59 @@ interface IVoteProps {
   vote: IVoteItem | null;
 }
 
-const useStyles = createStyles((theme) => ({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    bottom: 16,
-    right: 16,
-    width: 100,
-    height: 100,
-    borderRadius: "24px",
-    backgroundColor: "#ffffff25",
-    backdropFilter: "blur(5px)",
-  },
-  count: {
-    marginTop: 4,
-    marginBottom: 4,
-    fontSize: 18,
-  },
-  icon: {
-    cursor: "pointer",
-    fill: "white",
-    stroke: "white",
-    transition: "all 0.2s ease-in-out",
-  },
-  upvote: {
-    "&:hover": {
+const useStyles = createStyles((theme) => {
+  const active = {
+    upvote: {
       fill: theme.colors.lime[9],
       stroke: theme.colors.lime[9],
-      scale: "1.2",
     },
-  },
-  upvoteActive: {
-    fill: theme.colors.lime[9],
-    stroke: theme.colors.lime[9],
-  },
-  downvote: {
-    "&:hover": {
+    downvote: {
       fill: theme.colors.orange[7],
       stroke: theme.colors.orange[7],
-      scale: "1.2",
     },
-  },
-  downvoteActive: {
-    fill: theme.colors.orange[7],
-    stroke: theme.colors.orange[7],
-  },
-}));
+  };
+  return {
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "absolute",
+      bottom: 16,
+      right: 16,
+      width: 100,
+      height: 100,
+      borderRadius: "24px",
+      backgroundColor: "#ffffff25",
+      backdropFilter: "blur(5px)",
+    },
+    count: {
+      marginTop: 4,
+      marginBottom: 4,
+      fontSize: 18,
+    },
+    icon: {
+      cursor: "pointer",
+      fill: "white",
+      stroke: "white",
+      transition: "all 0.2s ease-in-out",
+    },
+    upvoteActive: active.upvote,
+    upvote: {
+      "&:hover": {
+        ...active.upvote,
+        scale: "1.2",
+      },
+    },
+    downvoteActive: active.downvote,
+    downvote: {
+      "&:hover": {
+        ...active.downvote,
+        scale: "1.2",
+      },
+    },
+  };
+});
 
 const Vote: FC<IVoteProps> = (props) => {
   const { post_id, count, vote } = props;
@@ -79,7 +83,7 @@ const Vote: FC<IVoteProps> = (props) => {
         className={cx(
           classes.icon,
           classes.downvote,
-          vote?.vote === "down" && classes.upvoteActive
+          vote?.vote === "down" && classes.downvoteActive
         )}
         size={26}
       />
