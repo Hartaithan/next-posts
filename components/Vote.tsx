@@ -1,12 +1,21 @@
 import { createStyles, Text } from "@mantine/core";
-import { FC } from "react";
+import { showNotification } from "@mantine/notifications";
+import { User } from "@supabase/supabase-js";
+import { FC, useState } from "react";
 import { CaretDown, CaretUp } from "tabler-icons-react";
+import { checkResStatus } from "../helpers/response";
 import { IVoteItem } from "../models/VoteModel";
 
 interface IVoteProps {
   post_id: number;
   count: number;
   vote: IVoteItem | null;
+  user: User | null;
+}
+
+interface IVoteState {
+  item: IVoteItem | null;
+  count: number;
 }
 
 const useStyles = createStyles((theme) => {
@@ -64,27 +73,69 @@ const useStyles = createStyles((theme) => {
 });
 
 const Vote: FC<IVoteProps> = (props) => {
-  const { post_id, count, vote } = props;
+  const { post_id, count, vote: voteRes, user } = props;
   const { classes, cx } = useStyles();
+  const [vote, setVote] = useState<IVoteState>({ item: voteRes, count });
+
+  const handleUpvote = async () => {
+    if (!user) {
+      return;
+    }
+    const payload = {
+      vote: "up",
+      post_id,
+      user: user.email,
+    };
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/votes`, {
+      method: "POST",
+      headers: new Headers({ "Content-Type": "application/json" }),
+      body: JSON.stringify(payload),
+    })
+      .then((res) => {
+        return checkResStatus(res);
+      })
+      .then((res) => {
+        setVote({ ...vote, item: res.vote, count: vote.count + 1 });
+        showNotification({
+          title: "Success",
+          color: "green",
+          message: res.message,
+        });
+      })
+      .catch((error) => {
+        showNotification({
+          title: "Error",
+          color: "red",
+          message: error?.message || "Something went wrong!",
+        });
+      });
+  };
+
+  const handleDownvote = async () => {};
+
+  const handleUpdateVote = async () => {};
+
   return (
     <div className={classes.container}>
       <CaretUp
         className={cx(
           classes.icon,
           classes.upvote,
-          vote?.vote === "up" && classes.upvoteActive
+          vote.item && vote.item.vote === "up" && classes.upvoteActive
         )}
+        onClick={() => handleUpvote()}
         size={26}
       />
       <Text weight={600} className={classes.count}>
-        {count}
+        {vote.count}
       </Text>
       <CaretDown
         className={cx(
           classes.icon,
           classes.downvote,
-          vote?.vote === "down" && classes.downvoteActive
+          vote.item && vote.item.vote === "down" && classes.downvoteActive
         )}
+        onClick={() => handleDownvote()}
         size={26}
       />
     </div>

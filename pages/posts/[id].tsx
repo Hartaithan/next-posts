@@ -216,7 +216,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
                 </Menu.Item>
               </Menu>
             )}
-            <Vote post_id={post_id} count={votes} vote={vote} />
+            <Vote post_id={post_id} count={votes} vote={vote} user={user} />
           </Group>
         </Card.Section>
         <Group className={classes.post}>
