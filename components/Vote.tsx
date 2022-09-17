@@ -1,4 +1,4 @@
-import { createStyles, Text } from "@mantine/core";
+import { createStyles, Loader, LoadingOverlay, Text } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { User } from "@supabase/supabase-js";
 import { FC, useState } from "react";
@@ -43,6 +43,7 @@ const useStyles = createStyles((theme) => {
       borderRadius: "24px",
       backgroundColor: "#ffffff25",
       backdropFilter: "blur(5px)",
+      overflow: "hidden",
     },
     count: {
       marginTop: 4,
@@ -76,6 +77,7 @@ const Vote: FC<IVoteProps> = (props) => {
   const { post_id, count, vote: voteRes, user } = props;
   const { classes, cx } = useStyles();
   const [vote, setVote] = useState<IVoteState>({ item: voteRes, count });
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   const unAuthError = () => {
     if (!user) {
@@ -118,6 +120,9 @@ const Vote: FC<IVoteProps> = (props) => {
           color: "red",
           message: error?.message || "Something went wrong!",
         });
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -152,6 +157,9 @@ const Vote: FC<IVoteProps> = (props) => {
           color: "red",
           message: error?.message || "Something went wrong!",
         });
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -187,6 +195,9 @@ const Vote: FC<IVoteProps> = (props) => {
           color: "red",
           message: error?.message || "Something went wrong!",
         });
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -221,6 +232,9 @@ const Vote: FC<IVoteProps> = (props) => {
           color: "red",
           message: error?.message || "Something went wrong!",
         });
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -229,6 +243,7 @@ const Vote: FC<IVoteProps> = (props) => {
       unAuthError();
       return;
     }
+    setLoading(true);
     switch (true) {
       case !vote.item && action === "up":
         handleUpvote();
@@ -249,12 +264,14 @@ const Vote: FC<IVoteProps> = (props) => {
         handleUpdateVote("down");
         break;
       default:
+        setLoading(false);
         break;
     }
   };
 
   return (
     <div className={classes.container}>
+      <LoadingOverlay visible={isLoading} />
       <CaretUp
         className={cx(
           classes.icon,
