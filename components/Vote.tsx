@@ -1,4 +1,5 @@
 import { createStyles, Loader, LoadingOverlay, Text } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 import { User } from "@supabase/supabase-js";
 import { FC, useState } from "react";
@@ -44,11 +45,26 @@ const useStyles = createStyles((theme) => {
       backgroundColor: "#ffffff25",
       backdropFilter: "blur(5px)",
       overflow: "hidden",
+      "@media (max-width: 576px)": {
+        position: "relative",
+        bottom: "inherit",
+        right: "inherit",
+        height: 32,
+        width: "100%",
+        marginTop: 12,
+        flexDirection: "row",
+        justifyContent: "center",
+      },
     },
     count: {
       marginTop: 4,
       marginBottom: 4,
       fontSize: 18,
+      "@media (max-width: 576px)": {
+        margin: 0,
+        marginLeft: 12,
+        marginRight: 12,
+      },
     },
     icon: {
       cursor: "pointer",
@@ -78,6 +94,7 @@ const Vote: FC<IVoteProps> = (props) => {
   const { classes, cx } = useStyles();
   const [vote, setVote] = useState<IVoteState>({ item: voteRes, count });
   const [isLoading, setLoading] = useState<boolean>(false);
+  const mobile = useMediaQuery("(max-width: 576px)");
 
   const unAuthError = () => {
     if (!user) {
@@ -271,7 +288,10 @@ const Vote: FC<IVoteProps> = (props) => {
 
   return (
     <div className={classes.container}>
-      <LoadingOverlay visible={isLoading} />
+      <LoadingOverlay
+        visible={isLoading}
+        loader={<Loader size={mobile ? "xs" : "md"} />}
+      />
       <CaretUp
         className={cx(
           classes.icon,
@@ -293,6 +313,13 @@ const Vote: FC<IVoteProps> = (props) => {
         onClick={() => handleVote("down")}
         size={26}
       />
+      <style jsx global>{`
+        .mantine-LoadingOverlay-root > div {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      `}</style>
     </div>
   );
 };
