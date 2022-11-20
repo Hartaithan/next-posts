@@ -60,6 +60,9 @@
     margin-bottom: 12px;
     font-size: 15px;
     line-height: 1.55;
+    &:last-child {
+      margin-bottom: 0px;
+    }
   }
   .ql-editor p > img {
     max-width: 100%;
