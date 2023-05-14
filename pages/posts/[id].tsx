@@ -83,6 +83,7 @@ const useStyles = createStyles((theme) => ({
     justifyContent: "flex-end",
     alignItems: "flex-start",
     gap: "0px",
+    zIndex: 2,
     color: `${theme.white} !important`,
     "*": {
       textShadow: "0px 3px 6px #000000",
@@ -127,6 +128,18 @@ const useStyles = createStyles((theme) => ({
   button: {
     padding: "5px",
     background: "transparent !important",
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 1,
+    width: "100%",
+    height: "100%",
+    backgroundImage:
+      "linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .85) 100%)",
   },
 }));
 
@@ -202,6 +215,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
     <MainLayout title={title}>
       <Card shadow="sm" p="lg" radius={20}>
         <Card.Section className={classes.section}>
+          <div className={classes.overlay} />
           <ImageFallback
             src={image_url}
             layout="fill"
