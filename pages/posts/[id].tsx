@@ -1,5 +1,6 @@
 import {
   Badge,
+  Box,
   Button,
   Card,
   createStyles,
@@ -65,11 +66,14 @@ const useStyles = createStyles((theme) => ({
     },
   },
   section: {
-    height: "300px",
+    height: "400px",
     width: "calc(100% + 40px)",
     position: "relative",
     borderRadius: "20px",
     overflow: "hidden",
+    "@media (max-width: 576px)": {
+      height: "300px",
+    },
   },
   title: {
     height: "100%",
@@ -78,10 +82,28 @@ const useStyles = createStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "flex-end",
     alignItems: "flex-start",
-    gap: "0",
+    gap: "0px",
     color: `${theme.white} !important`,
     "*": {
       textShadow: "0px 3px 6px #000000",
+    },
+    "@media (max-width: 576px)": {
+      flexDirection: "row",
+      justifyContent: "flex-start",
+      alignContent: "flex-end",
+      alignItems: "flex-end",
+    },
+  },
+  description: {
+    paddingRight: 110,
+    "@media (max-width: 576px)": {
+      display: "none",
+    },
+  },
+  mobileDescription: {
+    display: "none",
+    "@media (max-width: 576px)": {
+      display: "block",
     },
   },
   post: {
@@ -188,7 +210,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           />
           <Group className={classes.title}>
             <Title order={1}>{title ? title : "Title not found"}</Title>
-            <Text size="xl">
+            <Text className={classes.description} size="xl">
               {description ? description : "Description not found"}
             </Text>
             {post.user === user?.email && (
@@ -220,6 +242,12 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
           </Group>
         </Card.Section>
         <Group className={classes.post}>
+          <Box className={classes.mobileDescription}>
+            <Text weight={500}>Description:</Text>
+            <Text size="md">
+              {description ? description : "Description not found"}
+            </Text>
+          </Box>
           <Group className={classes.badges}>
             <Text weight={500}>
               Author:&nbsp;&nbsp;

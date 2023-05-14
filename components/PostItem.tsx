@@ -72,7 +72,7 @@ const PostItem: FC<IPostItemProps> = (props) => {
         <Text className={classes.title} weight={500} component="a">
           {title || "Title not found"}
         </Text>
-        <Text size="sm" color="dimmed" lineClamp={4}>
+        <Text size="sm" color="dimmed" lineClamp={3}>
           {description || "Description not found"}
         </Text>
         <Group position="apart" className={classes.footer}>
