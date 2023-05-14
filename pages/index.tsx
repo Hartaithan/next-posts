@@ -5,7 +5,7 @@ import type {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import PostGridItem from "../components/PostIGridtem";
+import PostGridItem from "../components/PostIGridItem";
 import MainLayout from "../layouts/MainLayout";
 import { IPostItem, IPostsResponse } from "../models/PostModel";
 

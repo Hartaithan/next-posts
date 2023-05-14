@@ -61,41 +61,37 @@ const MobileNavigation: FC = () => {
   const router = useRouter();
   const { classes, cx } = useStyles();
 
-  const items = useMemo(
-    () =>
-      mobileNavigation.map((link) => {
-        const active = router.pathname === link.path;
-        let Icon;
-        switch (link.name) {
-          case "Home":
-            Icon = Home;
-            break;
-          case "Add post":
-            Icon = Plus;
-            break;
-          case "Posts":
-            Icon = Article;
-            break;
-          default:
-            Icon = Home;
-            break;
-        }
-        return (
-          <Link key={link.name} href={link.path}>
-            <a
-              className={cx(
-                classes.link,
-                active && classes.linkActive,
-                link.name === "Add post" && classes.add
-              )}
-            >
-              <Icon size={24} strokeWidth={2} />
-            </a>
-          </Link>
-        );
-      }),
-    [] // eslint-disable-line
-  );
+  const items = mobileNavigation.map((link) => {
+    const active = router.pathname === link.path;
+    let Icon;
+    switch (link.name) {
+      case "Home":
+        Icon = Home;
+        break;
+      case "Add post":
+        Icon = Plus;
+        break;
+      case "Posts":
+        Icon = Article;
+        break;
+      default:
+        Icon = Home;
+        break;
+    }
+    return (
+      <Link key={link.name} href={link.path}>
+        <a
+          className={cx(
+            classes.link,
+            active && classes.linkActive,
+            link.name === "Add post" && classes.add
+          )}
+        >
+          <Icon size={24} strokeWidth={2} />
+        </a>
+      </Link>
+    );
+  });
 
   return <Container className={classes.navigation}>{items}</Container>;
 };
