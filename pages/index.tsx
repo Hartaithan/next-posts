@@ -1,4 +1,4 @@
-import { Grid, SimpleGrid, useMantineTheme } from "@mantine/core";
+import { Grid, SimpleGrid, Text, useMantineTheme } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import type {
   GetServerSideProps,
@@ -17,7 +17,8 @@ export const getServerSideProps: GetServerSideProps<
   IHomePageProps
 > = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?limit=4`);
-  const { posts }: IPostsResponse = await res.json();
+  const data: IPostsResponse = await res.json();
+  const posts = data?.posts || [];
   return {
     props: { posts },
   };
@@ -34,6 +35,11 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   const SECONDARY_COL_HEIGHT = PRIMARY_COL_HEIGHT / 2 - theme.spacing.md / 2;
   return (
     <MainLayout title={"Home"}>
+      {posts.length === 0 && (
+        <Text style={{ width: "100%", textAlign: "center" }}>
+          Nothing found :(
+        </Text>
+      )}
       {posts.length === 1 && (
         <Grid gutter="md">
           <Grid.Col xs={12}>
